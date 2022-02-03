@@ -2,12 +2,13 @@ package redis
 
 import (
 	"context"
-	"math/rand"
+	"encoding/json"
 
 	dbUser "github.com/burntcarrot/pm/drivers/db/user"
 	"github.com/burntcarrot/pm/entity/user"
 	"github.com/burntcarrot/pm/helpers"
 	"github.com/go-redis/redis/v8"
+	"github.com/google/uuid"
 )
 
 type UserRepo struct {
@@ -18,14 +19,24 @@ func NewUserRepo(conn *redis.Client) user.DomainRepo {
 	return &UserRepo{Conn: conn}
 }
 
-func (u *UserRepo) Login(ctx context.Context, email, password string) (user.Domain, error) {
-	pass, err := u.Conn.Get(ctx, email).Result()
+func (u *UserRepo) Login(ctx context.Context, username, password string) (user.Domain, error) {
+	raw, err := u.Conn.Get(ctx, username).Result()
 	if err != nil {
 		return user.Domain{}, err
 	}
 
+	uu := new(dbUser.User)
+
+	if err := json.Unmarshal([]byte(raw), uu); err != nil {
+		return user.Domain{}, err
+	}
+
 	us := dbUser.User{
-		Password: pass,
+		ID:       uu.ID,
+		Username: uu.Username,
+		Email:    uu.Email,
+		Password: uu.Password,
+		Role:     uu.Role,
 	}
 
 	return us.ToDomain(), nil
@@ -39,18 +50,36 @@ func (u *UserRepo) Create(ctx context.Context, us user.Domain) (user.Domain, err
 	}
 
 	createdUser := dbUser.User{
-		// TODO: Use UUID or something like that for other DBs
-		// Since Redis is a test DB, I'm using Random Integer
-		ID:       uint(rand.Int()),
+		ID:       uuid.New().String(),
+		Username: us.Username,
 		Email:    us.Email,
 		Password: hashedPassword,
 		Role:     us.Role,
 	}
 
-	insertErr := u.Conn.Set(ctx, us.Email, hashedPassword, 0).Err()
+	raw, err := json.Marshal(createdUser)
+	if err != nil {
+		return user.Domain{}, err
+	}
+
+	insertErr := u.Conn.Set(ctx, createdUser.Username, raw, 0).Err()
 	if insertErr != nil {
 		return user.Domain{}, insertErr
 	}
 
 	return createdUser.ToDomain(), nil
+}
+
+func (u *UserRepo) GetByID(ctx context.Context, id string) (user.Domain, error) {
+	raw, err := u.Conn.Get(ctx, id).Result()
+	if err != nil {
+		return user.Domain{}, err
+	}
+
+	// TODO: Need to create new entity?
+	us := dbUser.User{
+		Password: raw,
+	}
+
+	return us.ToDomain(), nil
 }

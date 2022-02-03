@@ -10,5 +10,8 @@ loc: ## Displays lines of code (LOC).
 todo: ## Displays all TODOs
 	@grep -nr "TODO:*"
 
+print: ## Displays all println
+	@grep -nr "fmt.Println*"
+
 # %:
 # 	@:

@@ -28,17 +28,15 @@ func (a *AuthController) Login(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	u, err := a.Usecase.Login(ctx, userLogin.Email, userLogin.Password)
+	u, err := a.Usecase.Login(ctx, userLogin.Username, userLogin.Password)
 	if err != nil {
 		return err
 	}
-	fmt.Println(u)
+	fmt.Println("User:", u)
 
 	// generate token
 	// SOLVED: inspect why user.ID is 0 => Redis doesn't use gorm, so no ID is generated
-	token, err := helpers.GenerateToken(int(u.ID), u.Role)
-	fmt.Println(err)
-	fmt.Println(token)
+	token, err := helpers.GenerateToken(u.ID, u.Role)
 	if err != nil {
 		return err
 	}
@@ -60,6 +58,7 @@ func (a *AuthController) Register(c echo.Context) error {
 
 	// map user
 	userDomain := user.Domain{
+		Username: userRegister.Username,
 		Email:    userRegister.Email,
 		Password: userRegister.Password,
 		Role:     userRegister.Role,
@@ -72,9 +71,10 @@ func (a *AuthController) Register(c echo.Context) error {
 	}
 
 	registerResponse := RegisterResponse{
-		ID:    u.ID,
-		Email: u.Email,
-		Role:  u.Role,
+		ID:       u.ID,
+		Username: u.Username,
+		Email:    u.Email,
+		Role:     u.Role,
 	}
 
 	fmt.Println("Woohoo register!")

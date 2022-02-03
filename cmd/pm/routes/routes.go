@@ -2,12 +2,14 @@ package routes
 
 import (
 	"github.com/burntcarrot/pm/controllers/auth"
+	"github.com/burntcarrot/pm/controllers/user"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
 type Controllers struct {
 	AuthController *auth.AuthController
+	UserController *user.UserController
 }
 
 func (c *Controllers) InitRoutes(e *echo.Echo) {
@@ -23,5 +25,7 @@ func (c *Controllers) InitRoutes(e *echo.Echo) {
 	{
 		api.POST("/register", c.AuthController.Register)
 		api.POST("/login", c.AuthController.Login)
+
+		api.GET("/u/:userId", c.UserController.GetByID)
 	}
 }

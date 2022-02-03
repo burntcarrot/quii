@@ -8,12 +8,12 @@ import (
 )
 
 type jwtClaim struct {
-	UserID int    `json:"user_id"`
+	UserID string `json:"user_id"`
 	Role   string `json:"role"`
 	jwt.StandardClaims
 }
 
-func GenerateToken(userID int, role string) (string, error) {
+func GenerateToken(userID string, role string) (string, error) {
 	jc := jwtClaim{userID, role, jwt.StandardClaims{
 		ExpiresAt: time.Now().Local().Add(time.Hour * 2400).Unix(),
 	}}

@@ -2,7 +2,6 @@ package user
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/go-playground/validator/v10"
@@ -20,27 +19,28 @@ func NewUsecase(repo DomainRepo, timeout time.Duration) *Usecase {
 	}
 }
 
-func (u *Usecase) Login(ctx context.Context, email, password string) (Domain, error) {
+func (u *Usecase) Login(ctx context.Context, username, password string) (Domain, error) {
 	validate := validator.New()
-	err := validate.Struct(LoginDomain{Email: email, Password: password})
+	err := validate.Struct(LoginDomain{Username: username, Password: password})
 
 	if err != nil {
 		return Domain{}, err
 	}
 
-	return u.Repo.Login(ctx, email, password)
+	return u.Repo.Login(ctx, username, password)
 }
 
 func (u *Usecase) Register(ctx context.Context, domain Domain) (Domain, error) {
 	validate := validator.New()
 	err := validate.Struct(domain)
 
-	// TODO: remove log print
-	fmt.Println(err)
-
 	if err != nil {
 		return Domain{}, err
 	}
 
 	return u.Repo.Create(ctx, domain)
+}
+
+func (u *Usecase) GetByID(ctx context.Context, id string) (Domain, error) {
+	return u.Repo.GetByID(ctx, id)
 }
