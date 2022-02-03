@@ -22,5 +22,6 @@ func (c *Controllers) InitRoutes(e *echo.Echo) {
 	// unprotected routes
 	{
 		api.POST("/register", c.AuthController.Register)
+		api.POST("/login", c.AuthController.Login)
 	}
 }

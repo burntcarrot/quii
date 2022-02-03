@@ -2,6 +2,7 @@ package redis
 
 import (
 	"context"
+	"math/rand"
 
 	dbUser "github.com/burntcarrot/pm/drivers/db/user"
 	"github.com/burntcarrot/pm/entity/user"
@@ -17,6 +18,19 @@ func NewUserRepo(conn *redis.Client) user.DomainRepo {
 	return &UserRepo{Conn: conn}
 }
 
+func (u *UserRepo) Login(ctx context.Context, email, password string) (user.Domain, error) {
+	pass, err := u.Conn.Get(ctx, email).Result()
+	if err != nil {
+		return user.Domain{}, err
+	}
+
+	us := dbUser.User{
+		Password: pass,
+	}
+
+	return us.ToDomain(), nil
+}
+
 func (u *UserRepo) Create(ctx context.Context, us user.Domain) (user.Domain, error) {
 	// hash password
 	hashedPassword, err := helpers.HashPassword(us.Password)
@@ -25,6 +39,9 @@ func (u *UserRepo) Create(ctx context.Context, us user.Domain) (user.Domain, err
 	}
 
 	createdUser := dbUser.User{
+		// TODO: Use UUID or something like that for other DBs
+		// Since Redis is a test DB, I'm using Random Integer
+		ID:       uint(rand.Int()),
 		Email:    us.Email,
 		Password: hashedPassword,
 		Role:     us.Role,

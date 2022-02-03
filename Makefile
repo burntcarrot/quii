@@ -7,5 +7,8 @@ loc: ## Displays lines of code (LOC).
 	@find -name "*.go" -print | xargs wc -l | tail -1 | cut -d ' ' -f 2 > loc.txt
 	@cat loc.txt | sed 's/.*/& lines of code/'
 
+todo: ## Displays all TODOs
+	@grep -nr "TODO:*"
+
 # %:
 # 	@:
