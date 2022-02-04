@@ -76,9 +76,16 @@ func (u *UserRepo) GetByID(ctx context.Context, id string) (user.Domain, error) 
 		return user.Domain{}, err
 	}
 
-	// TODO: Need to create new entity?
+	uu := new(dbUser.User)
+
+	if err := json.Unmarshal([]byte(raw), uu); err != nil {
+		return user.Domain{}, err
+	}
+
 	us := dbUser.User{
-		Password: raw,
+		Username: uu.Username,
+		Email:    uu.Email,
+		Role:     uu.Role,
 	}
 
 	return us.ToDomain(), nil

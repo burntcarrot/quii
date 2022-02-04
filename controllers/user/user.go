@@ -24,14 +24,18 @@ func (u *UserController) GetByID(c echo.Context) error {
 	// - details
 	// userID:profile
 	// 		- profile details
-	idParam := c.Param("userId")
+	// userID:projects
+	// 		- projects: JSON raw list
+	idParam := c.Param("userID")
 	us, err := u.Usecase.GetByID(ctx, idParam)
 	if err != nil {
 		return err
 	}
 
 	response := UserResponse{
-		Raw: us.Password,
+		Username: us.Username,
+		Email:    us.Email,
+		Role:     us.Role,
 	}
 
 	return controllers.Success(c, response)

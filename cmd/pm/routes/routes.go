@@ -21,11 +21,16 @@ func (c *Controllers) InitRoutes(e *echo.Echo) {
 		Format: "${method} ${uri} ${status} ${time_rfc3339} ${latency_human}\n",
 	}))
 
+	api.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins: []string{"*"},
+		AllowMethods: []string{echo.GET, echo.PUT, echo.POST, echo.DELETE},
+	}))
+
 	// unprotected routes
 	{
 		api.POST("/register", c.AuthController.Register)
 		api.POST("/login", c.AuthController.Login)
 
-		api.GET("/u/:userId", c.UserController.GetByID)
+		api.GET("/u/:userID", c.UserController.GetByID)
 	}
 }
