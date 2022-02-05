@@ -2,14 +2,17 @@ package routes
 
 import (
 	"github.com/burntcarrot/pm/controllers/auth"
+	"github.com/burntcarrot/pm/controllers/project"
 	"github.com/burntcarrot/pm/controllers/user"
+	"github.com/burntcarrot/pm/helpers"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
 type Controllers struct {
-	AuthController *auth.AuthController
-	UserController *user.UserController
+	AuthController    *auth.AuthController
+	UserController    *user.UserController
+	ProjectController *project.ProjectController
 }
 
 func (c *Controllers) InitRoutes(e *echo.Echo) {
@@ -32,5 +35,12 @@ func (c *Controllers) InitRoutes(e *echo.Echo) {
 		api.POST("/login", c.AuthController.Login)
 
 		api.GET("/u/:userID", c.UserController.GetByID)
+	}
+
+	u := api.Group("/u/:userID")
+	u.Use(helpers.UserRoleValidation)
+	{
+		u.POST("/create", c.ProjectController.CreateProject)
+		u.GET("/projects", c.ProjectController.GetProjects)
 	}
 }
