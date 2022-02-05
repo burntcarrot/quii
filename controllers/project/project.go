@@ -23,8 +23,38 @@ func (p *ProjectController) GetProjects(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	// create project
+	// get project
 	u, err := p.Usecase.GetProjects(ctx, username)
+	if err != nil {
+		return err
+	}
+
+	var ps []GetResponse
+
+	for _, j := range u {
+		getResponse := GetResponse{
+			ID:          j.ID,
+			Name:        j.Name,
+			Description: j.Description,
+			Github:      j.Github,
+		}
+
+		ps = append(ps, getResponse)
+	}
+
+	fmt.Println("Woohoo fetched projects!")
+
+	return controllers.Success(c, ps)
+}
+
+func (p *ProjectController) GetProjectByName(c echo.Context) error {
+	username := c.Param("userID")
+	projectName := c.Param("projectName")
+
+	ctx := c.Request().Context()
+
+	// get project
+	u, err := p.Usecase.GetProjectByName(ctx, username, projectName)
 	if err != nil {
 		return err
 	}

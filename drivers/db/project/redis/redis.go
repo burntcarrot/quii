@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 
 	dbProject "github.com/burntcarrot/pm/drivers/db/project"
 	"github.com/burntcarrot/pm/entity/project"
@@ -51,33 +52,50 @@ func (p *ProjectRepo) CreateProject(ctx context.Context, us project.Domain) (pro
 func (p *ProjectRepo) GetProjects(ctx context.Context, username string) ([]project.Domain, error) {
 	key := fmt.Sprintf("%s:projects", username)
 	raw, err := p.Conn.LRange(ctx, key, 0, MAX_FETCH_ROWS).Result()
+	// TODO: remove print statements
 	fmt.Println("Lrange raw:", raw, "\n")
 	fmt.Println("Lrange error:", err)
 	if err != nil {
 		return []project.Domain{}, err
 	}
 
-	uu := new(dbProject.Project)
-	var uuu []project.Domain
+	pr := new(dbProject.Project)
+	var projects []project.Domain
 
 	for _, j := range raw {
-		if err := json.Unmarshal([]byte(j), uu); err != nil {
+		if err := json.Unmarshal([]byte(j), pr); err != nil {
 			return []project.Domain{}, err
 		}
 
-		uuu = append(uuu, uu.ToDomain())
+		projects = append(projects, pr.ToDomain())
 	}
 
-	// if err := json.Unmarshal([]byte(raw), uu); err != nil {
-	// 	return project.Domain{}, err
-	// }
+	return projects, nil
+}
 
-	// us := dbProject.Project{
-	// 	ID:          uu.ID,
-	// 	Name:        uu.Name,
-	// 	Description: uu.Description,
-	// 	Github:      uu.Github,
-	// }
+func (p *ProjectRepo) GetProjectByName(ctx context.Context, username, projectName string) ([]project.Domain, error) {
+	key := fmt.Sprintf("%s:projects", username)
+	raw, err := p.Conn.LRange(ctx, key, 0, MAX_FETCH_ROWS).Result()
+	// TODO: remove print statements
+	fmt.Println("Lrange raw:", raw, "\n")
+	fmt.Println("Lrange error:", err)
+	if err != nil {
+		return []project.Domain{}, err
+	}
 
-	return uuu, nil
+	pr := new(dbProject.Project)
+	var projects []project.Domain
+
+	for _, j := range raw {
+		if err := json.Unmarshal([]byte(j), pr); err != nil {
+			return []project.Domain{}, err
+		}
+
+		if strings.ToLower(pr.Name) == strings.ToLower(projectName) {
+			projects = append(projects, pr.ToDomain())
+			return projects, nil
+		}
+	}
+
+	return []project.Domain{}, nil
 }

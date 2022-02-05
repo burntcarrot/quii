@@ -28,6 +28,14 @@ func (u *Usecase) GetProjects(ctx context.Context, username string) ([]Domain, e
 	return u.Repo.GetProjects(ctx, username)
 }
 
+func (u *Usecase) GetProjectByName(ctx context.Context, username, projectName string) ([]Domain, error) {
+	if username == "" && projectName == "" {
+		return []Domain{}, errors.New("empty username and project")
+	}
+
+	return u.Repo.GetProjectByName(ctx, username, projectName)
+}
+
 func (u *Usecase) CreateProject(ctx context.Context, domain Domain) (Domain, error) {
 	validate := validator.New()
 	err := validate.Struct(domain)
