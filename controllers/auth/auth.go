@@ -2,6 +2,7 @@ package auth
 
 import (
 	"fmt"
+	"strings"
 
 	"github.com/burntcarrot/pm/controllers"
 	"github.com/burntcarrot/pm/entity/user"
@@ -28,7 +29,7 @@ func (a *AuthController) Login(c echo.Context) error {
 
 	ctx := c.Request().Context()
 
-	u, err := a.Usecase.Login(ctx, userLogin.Username, userLogin.Password)
+	u, err := a.Usecase.Login(ctx, strings.ToLower(userLogin.Username), userLogin.Password)
 	if err != nil {
 		return err
 	}
@@ -58,7 +59,7 @@ func (a *AuthController) Register(c echo.Context) error {
 
 	// map user
 	userDomain := user.Domain{
-		Username: userRegister.Username,
+		Username: strings.ToLower(userRegister.Username),
 		Email:    userRegister.Email,
 		Password: userRegister.Password,
 		Role:     userRegister.Role,

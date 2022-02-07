@@ -49,12 +49,12 @@ func (p *ProjectController) GetProjects(c echo.Context) error {
 
 func (p *ProjectController) GetProjectByName(c echo.Context) error {
 	username := c.Param("userID")
-	projectName := c.Param("projectName")
+	projectID := c.Param("projectID")
 
 	ctx := c.Request().Context()
 
 	// get project
-	u, err := p.Usecase.GetProjectByName(ctx, username, projectName)
+	u, err := p.Usecase.GetProjectByName(ctx, username, projectID)
 	if err != nil {
 		return err
 	}

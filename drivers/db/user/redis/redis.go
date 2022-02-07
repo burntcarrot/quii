@@ -3,6 +3,8 @@ package redis
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"strings"
 
 	dbUser "github.com/burntcarrot/pm/drivers/db/user"
 	"github.com/burntcarrot/pm/entity/user"
@@ -20,7 +22,7 @@ func NewUserRepo(conn *redis.Client) user.DomainRepo {
 }
 
 func (u *UserRepo) Login(ctx context.Context, username, password string) (user.Domain, error) {
-	raw, err := u.Conn.Get(ctx, username).Result()
+	raw, err := u.Conn.Get(ctx, strings.ToLower(username)).Result()
 	if err != nil {
 		return user.Domain{}, err
 	}
@@ -51,7 +53,7 @@ func (u *UserRepo) Create(ctx context.Context, us user.Domain) (user.Domain, err
 
 	createdUser := dbUser.User{
 		ID:       uuid.New().String(),
-		Username: us.Username,
+		Username: strings.ToLower(us.Username),
 		Email:    us.Email,
 		Password: hashedPassword,
 		Role:     us.Role,
@@ -65,6 +67,14 @@ func (u *UserRepo) Create(ctx context.Context, us user.Domain) (user.Domain, err
 	insertErr := u.Conn.Set(ctx, createdUser.Username, raw, 0).Err()
 	if insertErr != nil {
 		return user.Domain{}, insertErr
+	}
+
+	// set counter for project while creating user itself
+	counter := fmt.Sprintf("%s:projects:counter", createdUser.Username)
+	counterErr := u.Conn.Set(ctx, counter, 1, 0).Err()
+	fmt.Println("counter err:", counterErr)
+	if counterErr != nil {
+		return user.Domain{}, counterErr
 	}
 
 	return createdUser.ToDomain(), nil
