@@ -17,7 +17,7 @@ jobs:
         run: |
           npm i -g insomnia-documenter
           insomnia-documenter --config insomnia/export.json --output docs/
-          sed -i 's/<div id="app">/<div id="app" data-root="/pm">/g' docs/index.html
+          sed -i 's/<div id="app">/<div id="app" data-root="\/pm">/g' index.html
 
       - name: Deploy 🚀
         uses: JamesIves/github-pages-deploy-action@v4.2.3
