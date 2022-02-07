@@ -45,7 +45,7 @@ func (c *Controllers) InitRoutes(e *echo.Echo) {
 		// projects
 		u.POST("/create", c.ProjectController.CreateProject)
 		u.GET("/projects", c.ProjectController.GetProjects)
-		u.GET("/projects/:projectID", c.ProjectController.GetProjectByName)
+		u.GET("/projects/:projectID", c.ProjectController.GetProjectByID)
 
 		// tasks
 		u.POST("/projects/:projectName/tasks/new", c.TaskController.CreateTask)

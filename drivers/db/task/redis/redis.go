@@ -22,16 +22,16 @@ func NewTaskRepo(conn *redis.Client) task.DomainRepo {
 }
 
 func (p *TaskRepo) CreateTask(ctx context.Context, us task.Domain) (task.Domain, error) {
+	// get ID from task counter
 	counter := fmt.Sprintf("%s:projects:%s:tasks:counter", us.Username, strings.ToLower(us.ProjectName))
-
 	counterValue, counterErr := p.Conn.Get(ctx, counter).Result()
 	if counterErr != nil {
 		return task.Domain{}, counterErr
 	}
 
+	// generate task ID
 	task_id := "task_" + counterValue
 
-	// TODO: do NOT use UUID for tasks, instead use a incremental ID
 	createdTask := dbTask.Task{
 		ID:       task_id,
 		Name:     us.Name,
@@ -44,9 +44,6 @@ func (p *TaskRepo) CreateTask(ctx context.Context, us task.Domain) (task.Domain,
 	if err != nil {
 		return task.Domain{}, err
 	}
-
-	// old: key hierarchy
-	// key := fmt.Sprintf("%s:projects:%s", us.Username, createdTask.Name)
 
 	// new: list-based
 	key := fmt.Sprintf("%s:projects:%s:tasks", us.Username, strings.ToLower(us.ProjectName))

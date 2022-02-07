@@ -88,7 +88,7 @@ func (p *ProjectRepo) GetProjects(ctx context.Context, username string) ([]proje
 	return projects, nil
 }
 
-func (p *ProjectRepo) GetProjectByName(ctx context.Context, username, projectID string) ([]project.Domain, error) {
+func (p *ProjectRepo) GetProjectByID(ctx context.Context, username, projectID string) ([]project.Domain, error) {
 	key := fmt.Sprintf("%s:projects", username)
 	raw, err := p.Conn.LRange(ctx, key, 0, MAX_FETCH_ROWS).Result()
 	// TODO: remove print statements
