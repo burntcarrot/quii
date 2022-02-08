@@ -16,7 +16,13 @@ type LoginDomain struct {
 }
 
 type DomainRepo interface {
-	Create(ctx context.Context, domain Domain) (Domain, error)
+	Register(ctx context.Context, domain Domain) (Domain, error)
+	Login(ctx context.Context, email, password string) (Domain, error)
+	GetByID(ctx context.Context, id string) (Domain, error)
+}
+
+type DomainService interface {
+	Register(ctx context.Context, domain Domain) (Domain, error)
 	Login(ctx context.Context, email, password string) (Domain, error)
 	GetByID(ctx context.Context, id string) (Domain, error)
 }

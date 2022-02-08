@@ -44,7 +44,7 @@ func (u *UserRepo) Login(ctx context.Context, username, password string) (user.D
 	return us.ToDomain(), nil
 }
 
-func (u *UserRepo) Create(ctx context.Context, us user.Domain) (user.Domain, error) {
+func (u *UserRepo) Register(ctx context.Context, us user.Domain) (user.Domain, error) {
 	// hash password
 	hashedPassword, err := helpers.HashPassword(us.Password)
 	if err != nil {

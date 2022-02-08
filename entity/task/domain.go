@@ -17,3 +17,9 @@ type DomainRepo interface {
 	GetTaskByName(ctx context.Context, username, projectName, taskName string) ([]Domain, error)
 	CreateTask(ctx context.Context, domain Domain) (Domain, error)
 }
+
+type DomainService interface {
+	GetTasks(ctx context.Context, username, projectName string) ([]Domain, error)
+	GetTaskByName(ctx context.Context, username, projectName, taskName string) ([]Domain, error)
+	CreateTask(ctx context.Context, domain Domain) (Domain, error)
+}

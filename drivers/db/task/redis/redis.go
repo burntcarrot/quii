@@ -65,9 +65,6 @@ func (p *TaskRepo) CreateTask(ctx context.Context, us task.Domain) (task.Domain,
 func (p *TaskRepo) GetTasks(ctx context.Context, username, projectName string) ([]task.Domain, error) {
 	key := fmt.Sprintf("%s:projects:%s:tasks", username, projectName)
 	raw, err := p.Conn.LRange(ctx, key, 0, MAX_FETCH_ROWS).Result()
-	// TODO: remove print statements
-	fmt.Println("Lrange raw:", raw, "\n")
-	fmt.Println("Lrange error:", err)
 	if err != nil {
 		return []task.Domain{}, err
 	}
@@ -89,9 +86,6 @@ func (p *TaskRepo) GetTasks(ctx context.Context, username, projectName string) (
 func (p *TaskRepo) GetTaskByName(ctx context.Context, username, projectName, taskName string) ([]task.Domain, error) {
 	key := fmt.Sprintf("%s:projects:%s:tasks", username, projectName)
 	raw, err := p.Conn.LRange(ctx, key, 0, MAX_FETCH_ROWS).Result()
-	// TODO: remove print statements
-	fmt.Println("Lrange raw:", raw, "\n")
-	fmt.Println("Lrange error:", err)
 	if err != nil {
 		return []task.Domain{}, err
 	}
@@ -104,7 +98,7 @@ func (p *TaskRepo) GetTaskByName(ctx context.Context, username, projectName, tas
 			return []task.Domain{}, err
 		}
 
-		if strings.ToLower(ts.ID) == strings.ToLower(taskName) {
+		if strings.EqualFold(ts.ID, taskName) {
 			tasks = append(tasks, ts.ToDomain())
 			return tasks, nil
 		}

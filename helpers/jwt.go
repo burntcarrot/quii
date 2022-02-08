@@ -1,6 +1,7 @@
 package helpers
 
 import (
+	"errors"
 	"fmt"
 	"strings"
 	"time"
@@ -50,5 +51,10 @@ func ExtractJWTPayloadRole(c echo.Context) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
+	if claims["role"] == nil {
+		return "", errors.New("no role found in claim")
+	}
+
 	return claims["role"].(string), nil
 }

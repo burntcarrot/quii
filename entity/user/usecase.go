@@ -38,7 +38,7 @@ func (u *Usecase) Register(ctx context.Context, domain Domain) (Domain, error) {
 		return Domain{}, err
 	}
 
-	return u.Repo.Create(ctx, domain)
+	return u.Repo.Register(ctx, domain)
 }
 
 func (u *Usecase) GetByID(ctx context.Context, id string) (Domain, error) {

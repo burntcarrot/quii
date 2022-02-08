@@ -33,7 +33,6 @@ func (a *AuthController) Login(c echo.Context) error {
 	if err != nil {
 		return err
 	}
-	fmt.Println("User:", u)
 
 	// generate token
 	// SOLVED: inspect why user.ID is 0 => Redis doesn't use gorm, so no ID is generated

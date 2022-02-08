@@ -67,9 +67,6 @@ func (p *ProjectRepo) CreateProject(ctx context.Context, us project.Domain) (pro
 func (p *ProjectRepo) GetProjects(ctx context.Context, username string) ([]project.Domain, error) {
 	key := fmt.Sprintf("%s:projects", username)
 	raw, err := p.Conn.LRange(ctx, key, 0, MAX_FETCH_ROWS).Result()
-	// TODO: remove print statements
-	fmt.Println("Lrange raw:", raw, "\n")
-	fmt.Println("Lrange error:", err)
 	if err != nil {
 		return []project.Domain{}, err
 	}
@@ -91,9 +88,6 @@ func (p *ProjectRepo) GetProjects(ctx context.Context, username string) ([]proje
 func (p *ProjectRepo) GetProjectByID(ctx context.Context, username, projectID string) ([]project.Domain, error) {
 	key := fmt.Sprintf("%s:projects", username)
 	raw, err := p.Conn.LRange(ctx, key, 0, MAX_FETCH_ROWS).Result()
-	// TODO: remove print statements
-	fmt.Println("Lrange raw:", raw, "\n")
-	fmt.Println("Lrange error:", err)
 	if err != nil {
 		return []project.Domain{}, err
 	}
@@ -106,7 +100,7 @@ func (p *ProjectRepo) GetProjectByID(ctx context.Context, username, projectID st
 			return []project.Domain{}, err
 		}
 
-		if strings.ToLower(pr.ID) == strings.ToLower(projectID) {
+		if strings.EqualFold(pr.ID, projectID) {
 			projects = append(projects, pr.ToDomain())
 			return projects, nil
 		}
