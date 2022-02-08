@@ -2,9 +2,11 @@ package task
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/burntcarrot/pm/controllers"
 	"github.com/burntcarrot/pm/entity/task"
+	"github.com/burntcarrot/pm/errors"
 	"github.com/labstack/echo/v4"
 )
 
@@ -19,73 +21,79 @@ func NewTaskController(u task.Usecase) *TaskController {
 }
 
 func (t *TaskController) GetTasks(c echo.Context) error {
-	username := c.Param("userID")
+	username := c.Param("userName")
 	projectName := c.Param("projectName")
 
 	ctx := c.Request().Context()
 
-	// get task
-	u, err := t.Usecase.GetTasks(ctx, username, projectName)
+	// get tasks
+	tasks, err := t.Usecase.GetTasks(ctx, username, projectName)
+	if err == errors.ErrValidationFailed {
+		return controllers.Error(c, http.StatusBadRequest, errors.ErrValidationFailed)
+	}
 	if err != nil {
-		return err
+		return controllers.Error(c, http.StatusInternalServerError, errors.ErrInternalServerError)
 	}
 
-	var ps []GetResponse
+	var response []GetResponse
 
-	for _, j := range u {
+	for _, task := range tasks {
 		getResponse := GetResponse{
-			ID:       j.ID,
-			Name:     j.Name,
-			Type:     j.Type,
-			Deadline: j.Type,
-			Status:   j.Status,
+			ID:       task.ID,
+			Name:     task.Name,
+			Type:     task.Type,
+			Deadline: task.Type,
+			Status:   task.Status,
 		}
 
-		ps = append(ps, getResponse)
+		response = append(response, getResponse)
 	}
 
 	fmt.Println("Woohoo fetched tasks!")
 
-	return controllers.Success(c, ps)
+	return controllers.Success(c, response)
 }
 
 func (t *TaskController) GetTaskByName(c echo.Context) error {
-	username := c.Param("userID")
+	username := c.Param("userName")
 	projectName := c.Param("projectName")
 	taskName := c.Param("taskName")
 
 	ctx := c.Request().Context()
 
 	// get task
-	u, err := t.Usecase.GetTaskByName(ctx, username, projectName, taskName)
+	tasks, err := t.Usecase.GetTaskByName(ctx, username, projectName, taskName)
+	if err == errors.ErrValidationFailed {
+		return controllers.Error(c, http.StatusBadRequest, errors.ErrValidationFailed)
+	}
 	if err != nil {
-		return err
+		return controllers.Error(c, http.StatusInternalServerError, errors.ErrInternalServerError)
 	}
 
-	var ps []GetResponse
+	var response []GetResponse
 
-	for _, j := range u {
+	for _, task := range tasks {
 		getResponse := GetResponse{
-			ID:       j.ID,
-			Name:     j.Name,
-			Type:     j.Type,
-			Deadline: j.Type,
-			Status:   j.Status,
+			ID:       task.ID,
+			Name:     task.Name,
+			Type:     task.Type,
+			Deadline: task.Type,
+			Status:   task.Status,
 		}
 
-		ps = append(ps, getResponse)
+		response = append(response, getResponse)
 	}
 
 	fmt.Println("Woohoo fetched tasks!")
 
-	return controllers.Success(c, ps)
+	return controllers.Success(c, response)
 }
 
 func (t *TaskController) CreateTask(c echo.Context) error {
-	taskCreate := CreateRequest{}
-	err := c.Bind(&taskCreate)
+	taskRequest := CreateRequest{}
+	err := c.Bind(&taskRequest)
 	if err != nil {
-		return err
+		return controllers.Error(c, http.StatusBadRequest, errors.ErrBadRequest)
 	}
 
 	// fetch context
@@ -93,32 +101,34 @@ func (t *TaskController) CreateTask(c echo.Context) error {
 
 	// TODO: check if task already exists
 
-	// map task
 	taskDomain := task.Domain{
-		ID:          taskCreate.ID,
-		Username:    taskCreate.Username,
-		ProjectName: taskCreate.ProjectName,
-		Name:        taskCreate.Name,
-		Type:        taskCreate.Type,
-		Deadline:    taskCreate.Deadline,
-		Status:      taskCreate.Status,
+		ID:          taskRequest.ID,
+		Username:    taskRequest.Username,
+		ProjectName: taskRequest.ProjectName,
+		Name:        taskRequest.Name,
+		Type:        taskRequest.Type,
+		Deadline:    taskRequest.Deadline,
+		Status:      taskRequest.Status,
 	}
 
 	// create task
-	u, err := t.Usecase.CreateTask(ctx, taskDomain)
+	task, err := t.Usecase.CreateTask(ctx, taskDomain)
+	if err == errors.ErrValidationFailed {
+		return controllers.Error(c, http.StatusBadRequest, errors.ErrValidationFailed)
+	}
 	if err != nil {
-		return err
+		return controllers.Error(c, http.StatusInternalServerError, errors.ErrInternalServerError)
 	}
 
-	createResponse := CreateResponse{
-		ID:       u.ID,
-		Name:     u.Name,
-		Type:     u.Type,
-		Deadline: u.Deadline,
-		Status:   u.Status,
+	response := CreateResponse{
+		ID:       task.ID,
+		Name:     task.Name,
+		Type:     task.Type,
+		Deadline: task.Deadline,
+		Status:   task.Status,
 	}
 
 	fmt.Println("Woohoo task created!")
 
-	return controllers.Success(c, createResponse)
+	return controllers.Success(c, response)
 }

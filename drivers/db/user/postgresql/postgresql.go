@@ -49,7 +49,7 @@ func (u *UserRepo) Login(ctx context.Context, email, password string) (user.Doma
 	return us.ToDomain(), nil
 }
 
-func (u *UserRepo) GetByID(ctx context.Context, id string) (user.Domain, error) {
+func (u *UserRepo) GetByName(ctx context.Context, id string) (user.Domain, error) {
 	var us dbUser.User
 	if err := u.Conn.Where("id = ?", id).First(&us).Error; err != nil {
 		return user.Domain{}, nil

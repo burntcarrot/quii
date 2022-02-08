@@ -2,10 +2,12 @@ package auth
 
 import (
 	"fmt"
+	"net/http"
 	"strings"
 
 	"github.com/burntcarrot/pm/controllers"
 	"github.com/burntcarrot/pm/entity/user"
+	"github.com/burntcarrot/pm/errors"
 	"github.com/burntcarrot/pm/helpers"
 	"github.com/labstack/echo/v4"
 )
@@ -21,34 +23,35 @@ func NewAuthController(u user.Usecase) *AuthController {
 }
 
 func (a *AuthController) Login(c echo.Context) error {
-	userLogin := LoginRequest{}
-	err := c.Bind(&userLogin)
+	userRequest := LoginRequest{}
+	err := c.Bind(&userRequest)
 	if err != nil {
-		return err
+		return controllers.Error(c, http.StatusBadRequest, errors.ErrBadRequest)
 	}
 
 	ctx := c.Request().Context()
 
-	u, err := a.Usecase.Login(ctx, strings.ToLower(userLogin.Username), userLogin.Password)
+	u, err := a.Usecase.Login(ctx, strings.ToLower(userRequest.Username), userRequest.Password)
+	if err == errors.ErrValidationFailed {
+		return controllers.Error(c, http.StatusUnauthorized, errors.ErrValidationFailed)
+	}
 	if err != nil {
-		return err
+		return controllers.Error(c, http.StatusInternalServerError, errors.ErrInternalServerError)
 	}
 
-	// generate token
-	// SOLVED: inspect why user.ID is 0 => Redis doesn't use gorm, so no ID is generated
-	token, err := helpers.GenerateToken(u.ID, u.Role)
+	token, err := helpers.GenerateToken(u.Username, u.Role)
 	if err != nil {
-		return err
+		return controllers.Error(c, http.StatusInternalServerError, errors.ErrInternalServerError)
 	}
 
 	return controllers.Success(c, LoginResponse{Token: token})
 }
 
 func (a *AuthController) Register(c echo.Context) error {
-	userRegister := RegisterRequest{}
-	err := c.Bind(&userRegister)
+	userRequest := RegisterRequest{}
+	err := c.Bind(&userRequest)
 	if err != nil {
-		return err
+		return controllers.Error(c, http.StatusBadRequest, errors.ErrBadRequest)
 	}
 
 	// fetch context
@@ -58,19 +61,22 @@ func (a *AuthController) Register(c echo.Context) error {
 
 	// map user
 	userDomain := user.Domain{
-		Username: strings.ToLower(userRegister.Username),
-		Email:    userRegister.Email,
-		Password: userRegister.Password,
-		Role:     userRegister.Role,
+		Username: strings.ToLower(userRequest.Username),
+		Email:    userRequest.Email,
+		Password: userRequest.Password,
+		Role:     userRequest.Role,
 	}
 
 	// register user
 	u, err := a.Usecase.Register(ctx, userDomain)
+	if err == errors.ErrValidationFailed {
+		return controllers.Error(c, http.StatusUnauthorized, errors.ErrValidationFailed)
+	}
 	if err != nil {
-		return err
+		return controllers.Error(c, http.StatusInternalServerError, errors.ErrInternalServerError)
 	}
 
-	registerResponse := RegisterResponse{
+	response := RegisterResponse{
 		ID:       u.ID,
 		Username: u.Username,
 		Email:    u.Email,
@@ -79,5 +85,5 @@ func (a *AuthController) Register(c echo.Context) error {
 
 	fmt.Println("Woohoo register!")
 
-	return controllers.Success(c, registerResponse)
+	return controllers.Success(c, response)
 }

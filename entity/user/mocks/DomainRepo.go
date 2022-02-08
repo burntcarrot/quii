@@ -35,8 +35,8 @@ func (_m *DomainRepo) Register(ctx context.Context, domain user.Domain) (user.Do
 	return r0, r1
 }
 
-// GetByID provides a mock function with given fields: ctx, id
-func (_m *DomainRepo) GetByID(ctx context.Context, id string) (user.Domain, error) {
+// GetByName provides a mock function with given fields: ctx, id
+func (_m *DomainRepo) GetByName(ctx context.Context, id string) (user.Domain, error) {
 	ret := _m.Called(ctx, id)
 
 	var r0 user.Domain

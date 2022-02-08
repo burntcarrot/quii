@@ -85,10 +85,10 @@ ok      github.com/burntcarrot/pm/entity/task   (cached)
 --- PASS: TestRegister (0.00s)
     --- PASS: TestRegister/Valid_Register (0.00s)
     --- PASS: TestRegister/Invalid_Register (0.00s)
-=== RUN   TestGetByID
-=== RUN   TestGetByID/Get_user_by_ID
---- PASS: TestGetByID (0.00s)
-    --- PASS: TestGetByID/Get_user_by_ID (0.00s)
+=== RUN   TestGetByName
+=== RUN   TestGetByName/Get_user_by_Name
+--- PASS: TestGetByName (0.00s)
+    --- PASS: TestGetByName/Get_user_by_Name (0.00s)
 PASS
 ```
 

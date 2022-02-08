@@ -8,6 +8,7 @@ import (
 
 	dbProject "github.com/burntcarrot/pm/drivers/db/project"
 	"github.com/burntcarrot/pm/entity/project"
+	"github.com/burntcarrot/pm/errors"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -25,7 +26,7 @@ func (p *ProjectRepo) CreateProject(ctx context.Context, us project.Domain) (pro
 	projectsCounter := fmt.Sprintf("%s:projects:counter", strings.ToLower(us.Username))
 	counterValue, projectCounterErr := p.Conn.Get(ctx, projectsCounter).Result()
 	if projectCounterErr != nil {
-		return project.Domain{}, projectCounterErr
+		return project.Domain{}, errors.ErrInternalServerError
 	}
 
 	project_id := "project_" + counterValue
@@ -39,26 +40,22 @@ func (p *ProjectRepo) CreateProject(ctx context.Context, us project.Domain) (pro
 
 	raw, err := json.Marshal(createdProject)
 	if err != nil {
-		return project.Domain{}, err
+		return project.Domain{}, errors.ErrInternalServerError
 	}
 
-	// old: key hierarchy
-	// key := fmt.Sprintf("%s:projects:%s", us.Username, createdProject.Name)
-
-	// new: list-based
 	key := fmt.Sprintf("%s:projects", us.Username)
 
 	insertErr := p.Conn.RPush(ctx, key, raw).Err()
 	if insertErr != nil {
-		return project.Domain{}, insertErr
+		return project.Domain{}, errors.ErrInternalServerError
 	}
 
 	// set counter for tasks while creating project itself
 	counter := fmt.Sprintf("%s:projects:%s:tasks:counter", us.Username, strings.ToLower(us.Name))
 	counterErr := p.Conn.Set(ctx, counter, 1, 0).Err()
-	fmt.Println("counter err:", counterErr)
+
 	if counterErr != nil {
-		return project.Domain{}, counterErr
+		return project.Domain{}, errors.ErrInternalServerError
 	}
 
 	return createdProject.ToDomain(), nil
@@ -68,7 +65,7 @@ func (p *ProjectRepo) GetProjects(ctx context.Context, username string) ([]proje
 	key := fmt.Sprintf("%s:projects", username)
 	raw, err := p.Conn.LRange(ctx, key, 0, MAX_FETCH_ROWS).Result()
 	if err != nil {
-		return []project.Domain{}, err
+		return []project.Domain{}, errors.ErrInternalServerError
 	}
 
 	pr := new(dbProject.Project)
@@ -76,7 +73,7 @@ func (p *ProjectRepo) GetProjects(ctx context.Context, username string) ([]proje
 
 	for _, j := range raw {
 		if err := json.Unmarshal([]byte(j), pr); err != nil {
-			return []project.Domain{}, err
+			return []project.Domain{}, errors.ErrInternalServerError
 		}
 
 		projects = append(projects, pr.ToDomain())
@@ -89,7 +86,7 @@ func (p *ProjectRepo) GetProjectByID(ctx context.Context, username, projectID st
 	key := fmt.Sprintf("%s:projects", username)
 	raw, err := p.Conn.LRange(ctx, key, 0, MAX_FETCH_ROWS).Result()
 	if err != nil {
-		return []project.Domain{}, err
+		return []project.Domain{}, errors.ErrInternalServerError
 	}
 
 	pr := new(dbProject.Project)
@@ -97,7 +94,7 @@ func (p *ProjectRepo) GetProjectByID(ctx context.Context, username, projectID st
 
 	for _, j := range raw {
 		if err := json.Unmarshal([]byte(j), pr); err != nil {
-			return []project.Domain{}, err
+			return []project.Domain{}, errors.ErrInternalServerError
 		}
 
 		if strings.EqualFold(pr.ID, projectID) {

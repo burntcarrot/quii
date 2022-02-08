@@ -36,10 +36,10 @@ func (c *Controllers) InitRoutes(e *echo.Echo) {
 		api.POST("/register", c.AuthController.Register)
 		api.POST("/login", c.AuthController.Login)
 
-		api.GET("/profile/:userID", c.UserController.GetByID)
+		api.GET("/profile/:userName", c.UserController.GetByName)
 	}
 
-	u := api.Group("/u/:userID")
+	u := api.Group("/u/:userName")
 	u.Use(helpers.UserRoleValidation)
 	{
 		// projects

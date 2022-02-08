@@ -9,8 +9,6 @@ type DBConfig struct {
 }
 
 func (c *DBConfig) InitDB() *redis.Client {
-	// dsn := fmt.Sprintf("localhost:6379")
-
 	redisOpts := &redis.Options{
 		Addr:     "localhost:6379",
 		Password: "",
@@ -18,10 +16,6 @@ func (c *DBConfig) InitDB() *redis.Client {
 	}
 
 	db := redis.NewClient(redisOpts)
-	// if err != nil {
-	// 	// move to fatal so it can panic
-	// 	log.Println(err)
-	// }
 
 	return db
 }

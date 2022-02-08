@@ -2,9 +2,9 @@ package project
 
 import (
 	"context"
-	"errors"
 	"time"
 
+	"github.com/burntcarrot/pm/errors"
 	"github.com/go-playground/validator"
 )
 
@@ -21,27 +21,36 @@ func NewUsecase(repo DomainRepo, timeout time.Duration) *Usecase {
 }
 
 func (u *Usecase) GetProjects(ctx context.Context, username string) ([]Domain, error) {
+	ctx, cancel := context.WithTimeout(ctx, u.ctxTimeout)
+	defer cancel()
+
 	if username == "" {
-		return []Domain{}, errors.New("empty username")
+		return []Domain{}, errors.ErrValidationFailed
 	}
 
 	return u.Repo.GetProjects(ctx, username)
 }
 
 func (u *Usecase) GetProjectByID(ctx context.Context, username, projectID string) ([]Domain, error) {
+	ctx, cancel := context.WithTimeout(ctx, u.ctxTimeout)
+	defer cancel()
+
 	if username == "" && projectID == "" {
-		return []Domain{}, errors.New("empty username and project")
+		return []Domain{}, errors.ErrValidationFailed
 	}
 
 	return u.Repo.GetProjectByID(ctx, username, projectID)
 }
 
 func (u *Usecase) CreateProject(ctx context.Context, domain Domain) (Domain, error) {
+	ctx, cancel := context.WithTimeout(ctx, u.ctxTimeout)
+	defer cancel()
+
 	validate := validator.New()
 	err := validate.Struct(domain)
 
 	if err != nil {
-		return Domain{}, err
+		return Domain{}, errors.ErrValidationFailed
 	}
 
 	return u.Repo.CreateProject(ctx, domain)

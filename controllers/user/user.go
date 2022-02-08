@@ -1,10 +1,12 @@
 package user
 
 import (
+	"net/http"
 	"strings"
 
 	"github.com/burntcarrot/pm/controllers"
 	"github.com/burntcarrot/pm/entity/user"
+	"github.com/burntcarrot/pm/errors"
 	"github.com/labstack/echo/v4"
 )
 
@@ -18,12 +20,12 @@ func NewUserController(u user.Usecase) *UserController {
 	}
 }
 
-func (u *UserController) GetByID(c echo.Context) error {
+func (u *UserController) GetByName(c echo.Context) error {
 	ctx := c.Request().Context()
-	userID := c.Param("userID")
-	us, err := u.Usecase.GetByID(ctx, strings.ToLower(userID))
+	userName := c.Param("userName")
+	us, err := u.Usecase.GetByName(ctx, strings.ToLower(userName))
 	if err != nil {
-		return err
+		return controllers.Error(c, http.StatusInternalServerError, errors.ErrInternalServerError)
 	}
 
 	response := UserResponse{

@@ -2,9 +2,11 @@ package project
 
 import (
 	"fmt"
+	"net/http"
 
 	"github.com/burntcarrot/pm/controllers"
 	"github.com/burntcarrot/pm/entity/project"
+	"github.com/burntcarrot/pm/errors"
 	"github.com/labstack/echo/v4"
 )
 
@@ -19,69 +21,75 @@ func NewProjectController(u project.Usecase) *ProjectController {
 }
 
 func (p *ProjectController) GetProjects(c echo.Context) error {
-	username := c.Param("userID")
+	username := c.Param("userName")
 
 	ctx := c.Request().Context()
 
-	// get project
-	u, err := p.Usecase.GetProjects(ctx, username)
+	// get projects
+	projects, err := p.Usecase.GetProjects(ctx, username)
+	if err == errors.ErrValidationFailed {
+		return controllers.Error(c, http.StatusBadRequest, errors.ErrValidationFailed)
+	}
 	if err != nil {
-		return err
+		return controllers.Error(c, http.StatusInternalServerError, errors.ErrInternalServerError)
 	}
 
-	var ps []GetResponse
+	var response []GetResponse
 
-	for _, j := range u {
+	for _, project := range projects {
 		getResponse := GetResponse{
-			ID:          j.ID,
-			Name:        j.Name,
-			Description: j.Description,
-			Github:      j.Github,
+			ID:          project.ID,
+			Name:        project.Name,
+			Description: project.Description,
+			Github:      project.Github,
 		}
 
-		ps = append(ps, getResponse)
+		response = append(response, getResponse)
 	}
 
 	fmt.Println("Woohoo fetched projects!")
 
-	return controllers.Success(c, ps)
+	return controllers.Success(c, response)
 }
 
 func (p *ProjectController) GetProjectByID(c echo.Context) error {
-	username := c.Param("userID")
+	username := c.Param("userName")
 	projectID := c.Param("projectID")
 
 	ctx := c.Request().Context()
 
 	// get project
-	u, err := p.Usecase.GetProjectByID(ctx, username, projectID)
+	projects, err := p.Usecase.GetProjectByID(ctx, username, projectID)
+	if err == errors.ErrValidationFailed {
+		return controllers.Error(c, http.StatusBadRequest, errors.ErrValidationFailed)
+	}
 	if err != nil {
-		return err
+		return controllers.Error(c, http.StatusInternalServerError, errors.ErrInternalServerError)
 	}
 
-	var ps []GetResponse
+	var response []GetResponse
 
-	for _, j := range u {
+	for _, project := range projects {
 		getResponse := GetResponse{
-			ID:          j.ID,
-			Name:        j.Name,
-			Description: j.Description,
-			Github:      j.Github,
+			ID:          project.ID,
+			Name:        project.Name,
+			Description: project.Description,
+			Github:      project.Github,
 		}
 
-		ps = append(ps, getResponse)
+		response = append(response, getResponse)
 	}
 
 	fmt.Println("Woohoo fetched projects!")
 
-	return controllers.Success(c, ps)
+	return controllers.Success(c, response)
 }
 
 func (p *ProjectController) CreateProject(c echo.Context) error {
-	projectCreate := CreateRequest{}
-	err := c.Bind(&projectCreate)
+	projectRequest := CreateRequest{}
+	err := c.Bind(&projectRequest)
 	if err != nil {
-		return err
+		return controllers.Error(c, http.StatusInternalServerError, errors.ErrInternalServerError)
 	}
 
 	// fetch context
@@ -89,29 +97,31 @@ func (p *ProjectController) CreateProject(c echo.Context) error {
 
 	// TODO: check if project already exists
 
-	// map project
 	projectDomain := project.Domain{
-		ID:          projectCreate.ID,
-		Username:    projectCreate.Username,
-		Name:        projectCreate.Name,
-		Description: projectCreate.Description,
-		Github:      projectCreate.Github,
+		ID:          projectRequest.ID,
+		Username:    projectRequest.Username,
+		Name:        projectRequest.Name,
+		Description: projectRequest.Description,
+		Github:      projectRequest.Github,
 	}
 
 	// create project
-	u, err := p.Usecase.CreateProject(ctx, projectDomain)
+	project, err := p.Usecase.CreateProject(ctx, projectDomain)
+	if err == errors.ErrValidationFailed {
+		return controllers.Error(c, http.StatusBadRequest, errors.ErrValidationFailed)
+	}
 	if err != nil {
-		return err
+		return controllers.Error(c, http.StatusInternalServerError, errors.ErrInternalServerError)
 	}
 
-	createResponse := CreateResponse{
-		ID:          u.ID,
-		Name:        u.Name,
-		Description: u.Description,
-		Github:      u.Github,
+	response := CreateResponse{
+		ID:          project.ID,
+		Name:        project.Name,
+		Description: project.Description,
+		Github:      project.Github,
 	}
 
 	fmt.Println("Woohoo project created!")
 
-	return controllers.Success(c, createResponse)
+	return controllers.Success(c, response)
 }

@@ -22,20 +22,29 @@ import (
 func main() {
 	e := echo.New()
 
+	// get DB connection
+	// TODO: parse DB connection configs from config file
 	dbConfig := redis.DBConfig{
 		User: "test",
 	}
 	Conn := dbConfig.InitDB()
 
-	userUsecase := user.NewUsecase(userDbRedis.NewUserRepo(Conn), 60*time.Second)
-	projectUsecase := project.NewUsecase(projectDbRedis.NewProjectRepo(Conn), 60*time.Second)
-	taskUsecase := task.NewUsecase(taskDbRedis.NewTaskRepo(Conn), 60*time.Second)
+	// set timeout
+	// TODO: parse timeout duration from config file
+	timeout := time.Duration(time.Minute * 1)
 
+	// initialize usecase
+	userUsecase := user.NewUsecase(userDbRedis.NewUserRepo(Conn), timeout)
+	projectUsecase := project.NewUsecase(projectDbRedis.NewProjectRepo(Conn), timeout)
+	taskUsecase := task.NewUsecase(taskDbRedis.NewTaskRepo(Conn), timeout)
+
+	// initialize controllers
 	authController := auth.NewAuthController(*userUsecase)
 	userController := uc.NewUserController(*userUsecase)
 	projectController := pc.NewProjectController(*projectUsecase)
 	taskController := tc.NewTaskController(*taskUsecase)
 
+	// initialize routes and start echo server
 	rc := routes.Controllers{
 		AuthController:    authController,
 		UserController:    userController,

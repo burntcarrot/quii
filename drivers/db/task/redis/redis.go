@@ -8,6 +8,7 @@ import (
 
 	dbTask "github.com/burntcarrot/pm/drivers/db/task"
 	"github.com/burntcarrot/pm/entity/task"
+	"github.com/burntcarrot/pm/errors"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -26,7 +27,7 @@ func (p *TaskRepo) CreateTask(ctx context.Context, us task.Domain) (task.Domain,
 	counter := fmt.Sprintf("%s:projects:%s:tasks:counter", us.Username, strings.ToLower(us.ProjectName))
 	counterValue, counterErr := p.Conn.Get(ctx, counter).Result()
 	if counterErr != nil {
-		return task.Domain{}, counterErr
+		return task.Domain{}, errors.ErrInternalServerError
 	}
 
 	// generate task ID
@@ -42,7 +43,7 @@ func (p *TaskRepo) CreateTask(ctx context.Context, us task.Domain) (task.Domain,
 
 	raw, err := json.Marshal(createdTask)
 	if err != nil {
-		return task.Domain{}, err
+		return task.Domain{}, errors.ErrInternalServerError
 	}
 
 	// new: list-based
@@ -50,13 +51,13 @@ func (p *TaskRepo) CreateTask(ctx context.Context, us task.Domain) (task.Domain,
 
 	insertErr := p.Conn.RPush(ctx, key, raw).Err()
 	if insertErr != nil {
-		return task.Domain{}, insertErr
+		return task.Domain{}, errors.ErrInternalServerError
 	}
 
 	// increment counter after creating task
 	incrErr := p.Conn.Incr(ctx, counter).Err()
 	if incrErr != nil {
-		return task.Domain{}, incrErr
+		return task.Domain{}, errors.ErrInternalServerError
 	}
 
 	return createdTask.ToDomain(), nil
@@ -66,7 +67,7 @@ func (p *TaskRepo) GetTasks(ctx context.Context, username, projectName string) (
 	key := fmt.Sprintf("%s:projects:%s:tasks", username, projectName)
 	raw, err := p.Conn.LRange(ctx, key, 0, MAX_FETCH_ROWS).Result()
 	if err != nil {
-		return []task.Domain{}, err
+		return []task.Domain{}, errors.ErrInternalServerError
 	}
 
 	ts := new(dbTask.Task)
@@ -74,7 +75,7 @@ func (p *TaskRepo) GetTasks(ctx context.Context, username, projectName string) (
 
 	for _, j := range raw {
 		if err := json.Unmarshal([]byte(j), ts); err != nil {
-			return []task.Domain{}, err
+			return []task.Domain{}, errors.ErrInternalServerError
 		}
 
 		tasks = append(tasks, ts.ToDomain())
@@ -87,7 +88,7 @@ func (p *TaskRepo) GetTaskByName(ctx context.Context, username, projectName, tas
 	key := fmt.Sprintf("%s:projects:%s:tasks", username, projectName)
 	raw, err := p.Conn.LRange(ctx, key, 0, MAX_FETCH_ROWS).Result()
 	if err != nil {
-		return []task.Domain{}, err
+		return []task.Domain{}, errors.ErrInternalServerError
 	}
 
 	ts := new(dbTask.Task)
@@ -95,7 +96,7 @@ func (p *TaskRepo) GetTaskByName(ctx context.Context, username, projectName, tas
 
 	for _, j := range raw {
 		if err := json.Unmarshal([]byte(j), ts); err != nil {
-			return []task.Domain{}, err
+			return []task.Domain{}, errors.ErrInternalServerError
 		}
 
 		if strings.EqualFold(ts.ID, taskName) {

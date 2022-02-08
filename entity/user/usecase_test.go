@@ -75,12 +75,12 @@ func TestRegister(t *testing.T) {
 	})
 }
 
-func TestGetByID(t *testing.T) {
+func TestGetByName(t *testing.T) {
 	setup()
-	userRepo.On("GetByID", mock.Anything, mock.AnythingOfType("string")).Return(userDomain, nil).Once()
+	userRepo.On("GetByName", mock.Anything, mock.AnythingOfType("string")).Return(userDomain, nil).Once()
 
-	t.Run("Get user by ID", func(t *testing.T) {
-		user, err := userService.GetByID(context.Background(), "test")
+	t.Run("Get user by Name", func(t *testing.T) {
+		user, err := userService.GetByName(context.Background(), "test")
 		assert.Nil(t, err)
 		assert.Equal(t, userDomain.Username, user.Username)
 	})

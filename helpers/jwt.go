@@ -1,12 +1,11 @@
 package helpers
 
 import (
-	"errors"
-	"fmt"
 	"strings"
 	"time"
 
 	"github.com/brianvoe/sjwt"
+	"github.com/burntcarrot/pm/errors"
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 )
@@ -17,8 +16,8 @@ type jwtClaim struct {
 	jwt.StandardClaims
 }
 
-func GenerateToken(userID string, role string) (string, error) {
-	jc := jwtClaim{userID, role, jwt.StandardClaims{
+func GenerateToken(userName string, role string) (string, error) {
+	jc := jwtClaim{userName, role, jwt.StandardClaims{
 		ExpiresAt: time.Now().Local().Add(time.Hour * 2400).Unix(),
 	}}
 
@@ -26,7 +25,9 @@ func GenerateToken(userID string, role string) (string, error) {
 
 	// TODO: parse jwt secret through env
 	tokenString, err := token.SignedString([]byte("abcd"))
-	fmt.Println(err)
+	if err != nil {
+		return "", errors.ErrInternalServerError
+	}
 
 	return tokenString, nil
 }
@@ -53,7 +54,7 @@ func ExtractJWTPayloadRole(c echo.Context) (string, error) {
 	}
 
 	if claims["role"] == nil {
-		return "", errors.New("no role found in claim")
+		return "", errors.ErrInvalidCredentials
 	}
 
 	return claims["role"].(string), nil
