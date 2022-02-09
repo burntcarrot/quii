@@ -84,7 +84,7 @@ func TestGetTaskByName(t *testing.T) {
 	})
 
 	t.Run("Invalid Get Task by Name", func(t *testing.T) {
-		task, err := taskService.GetTaskByName(context.Background(), "burntcarrot", "pm", "")
+		task, err := taskService.GetTaskByName(context.Background(), "burntcarrot", "pm", "task_nonexistent")
 		if err != nil {
 			t.Errorf("Error: %s", err)
 		}

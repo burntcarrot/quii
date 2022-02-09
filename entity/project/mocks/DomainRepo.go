@@ -35,13 +35,13 @@ func (_m *DomainRepo) CreateProject(ctx context.Context, domain project.Domain) 
 	return r0, r1
 }
 
-// GetProjectByID provides a mock function with given fields: ctx, username, projectID
-func (_m *DomainRepo) GetProjectByID(ctx context.Context, username string, projectID string) ([]project.Domain, error) {
-	ret := _m.Called(ctx, username, projectID)
+// GetProjectByName provides a mock function with given fields: ctx, username, projectName
+func (_m *DomainRepo) GetProjectByName(ctx context.Context, username string, projectName string) ([]project.Domain, error) {
+	ret := _m.Called(ctx, username, projectName)
 
 	var r0 []project.Domain
 	if rf, ok := ret.Get(0).(func(context.Context, string, string) []project.Domain); ok {
-		r0 = rf(ctx, username, projectID)
+		r0 = rf(ctx, username, projectName)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).([]project.Domain)
@@ -50,7 +50,7 @@ func (_m *DomainRepo) GetProjectByID(ctx context.Context, username string, proje
 
 	var r1 error
 	if rf, ok := ret.Get(1).(func(context.Context, string, string) error); ok {
-		r1 = rf(ctx, username, projectID)
+		r1 = rf(ctx, username, projectName)
 	} else {
 		r1 = ret.Error(1)
 	}

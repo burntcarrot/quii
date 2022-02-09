@@ -67,10 +67,10 @@ func TestGetProjects(t *testing.T) {
 
 func TestGetProjectByID(t *testing.T) {
 	setup()
-	projectRepo.On("GetProjectByID", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return([]project.Domain{projectDomain}, nil)
+	projectRepo.On("GetProjectByName", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return([]project.Domain{projectDomain}, nil)
 
-	t.Run("Valid Get Project by ID", func(t *testing.T) {
-		projects, err := projectService.GetProjectByID(context.Background(), "burntcarrot", "project_1")
+	t.Run("Valid Get Project by Name", func(t *testing.T) {
+		projects, err := projectService.GetProjectByName(context.Background(), "burntcarrot", "project_1")
 		if err != nil {
 			t.Errorf("Error: %s", err)
 		}
@@ -82,8 +82,8 @@ func TestGetProjectByID(t *testing.T) {
 		assert.Equal(t, projectDomain, projects[0])
 	})
 
-	t.Run("Invalid Get Project by ID", func(t *testing.T) {
-		project, err := projectService.GetProjectByID(context.Background(), "burntcarrot", "")
+	t.Run("Invalid Get Project by Name", func(t *testing.T) {
+		project, err := projectService.GetProjectByName(context.Background(), "burntcarrot", "project_nonexistent")
 		if err != nil {
 			t.Errorf("Error: %s", err)
 		}

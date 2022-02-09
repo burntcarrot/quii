@@ -14,27 +14,6 @@ type DomainRepo struct {
 	mock.Mock
 }
 
-// Register provides a mock function with given fields: ctx, domain
-func (_m *DomainRepo) Register(ctx context.Context, domain user.Domain) (user.Domain, error) {
-	ret := _m.Called(ctx, domain)
-
-	var r0 user.Domain
-	if rf, ok := ret.Get(0).(func(context.Context, user.Domain) user.Domain); ok {
-		r0 = rf(ctx, domain)
-	} else {
-		r0 = ret.Get(0).(user.Domain)
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(context.Context, user.Domain) error); ok {
-		r1 = rf(ctx, domain)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
 // GetByName provides a mock function with given fields: ctx, id
 func (_m *DomainRepo) GetByName(ctx context.Context, id string) (user.Domain, error) {
 	ret := _m.Called(ctx, id)
@@ -70,6 +49,27 @@ func (_m *DomainRepo) Login(ctx context.Context, email string, password string) 
 	var r1 error
 	if rf, ok := ret.Get(1).(func(context.Context, string, string) error); ok {
 		r1 = rf(ctx, email, password)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// Register provides a mock function with given fields: ctx, domain
+func (_m *DomainRepo) Register(ctx context.Context, domain user.Domain) (user.Domain, error) {
+	ret := _m.Called(ctx, domain)
+
+	var r0 user.Domain
+	if rf, ok := ret.Get(0).(func(context.Context, user.Domain) user.Domain); ok {
+		r0 = rf(ctx, domain)
+	} else {
+		r0 = ret.Get(0).(user.Domain)
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, user.Domain) error); ok {
+		r1 = rf(ctx, domain)
 	} else {
 		r1 = ret.Error(1)
 	}

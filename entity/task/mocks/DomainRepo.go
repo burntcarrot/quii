@@ -35,6 +35,29 @@ func (_m *DomainRepo) CreateTask(ctx context.Context, domain task.Domain) (task.
 	return r0, r1
 }
 
+// GetTaskByID provides a mock function with given fields: ctx, username, projectName, taskID
+func (_m *DomainRepo) GetTaskByID(ctx context.Context, username string, projectName string, taskID string) ([]task.Domain, error) {
+	ret := _m.Called(ctx, username, projectName, taskID)
+
+	var r0 []task.Domain
+	if rf, ok := ret.Get(0).(func(context.Context, string, string, string) []task.Domain); ok {
+		r0 = rf(ctx, username, projectName, taskID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]task.Domain)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, string, string, string) error); ok {
+		r1 = rf(ctx, username, projectName, taskID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetTaskByName provides a mock function with given fields: ctx, username, projectName, taskName
 func (_m *DomainRepo) GetTaskByName(ctx context.Context, username string, projectName string, taskName string) ([]task.Domain, error) {
 	ret := _m.Called(ctx, username, projectName, taskName)
