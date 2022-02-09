@@ -57,7 +57,10 @@ func (a *AuthController) Register(c echo.Context) error {
 	// fetch context
 	ctx := c.Request().Context()
 
-	// TODO: check if user already exists
+	us, _ := a.Usecase.GetByName(ctx, userRequest.Username)
+	if us.Username != "" {
+		return controllers.Error(c, http.StatusBadRequest, errors.ErrUserAlreadyExists)
+	}
 
 	// map user
 	userDomain := user.Domain{

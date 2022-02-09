@@ -31,15 +31,15 @@ func (u *Usecase) GetProjects(ctx context.Context, username string) ([]Domain, e
 	return u.Repo.GetProjects(ctx, username)
 }
 
-func (u *Usecase) GetProjectByID(ctx context.Context, username, projectID string) ([]Domain, error) {
+func (u *Usecase) GetProjectByName(ctx context.Context, username, projectName string) ([]Domain, error) {
 	ctx, cancel := context.WithTimeout(ctx, u.ctxTimeout)
 	defer cancel()
 
-	if username == "" && projectID == "" {
+	if username == "" || projectName == "" {
 		return []Domain{}, errors.ErrValidationFailed
 	}
 
-	return u.Repo.GetProjectByID(ctx, username, projectID)
+	return u.Repo.GetProjectByName(ctx, username, projectName)
 }
 
 func (u *Usecase) CreateProject(ctx context.Context, domain Domain) (Domain, error) {

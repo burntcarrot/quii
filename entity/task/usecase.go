@@ -35,11 +35,22 @@ func (u *Usecase) GetTaskByName(ctx context.Context, username, projectName, task
 	ctx, cancel := context.WithTimeout(ctx, u.ctxTimeout)
 	defer cancel()
 
-	if username == "" && taskName == "" {
+	if username == "" || taskName == "" {
 		return []Domain{}, errors.ErrValidationFailed
 	}
 
 	return u.Repo.GetTaskByName(ctx, username, projectName, taskName)
+}
+
+func (u *Usecase) GetTaskByID(ctx context.Context, username, projectName, taskID string) ([]Domain, error) {
+	ctx, cancel := context.WithTimeout(ctx, u.ctxTimeout)
+	defer cancel()
+
+	if username == "" || taskID == "" {
+		return []Domain{}, errors.ErrValidationFailed
+	}
+
+	return u.Repo.GetTaskByID(ctx, username, projectName, taskID)
 }
 
 func (u *Usecase) CreateTask(ctx context.Context, domain Domain) (Domain, error) {

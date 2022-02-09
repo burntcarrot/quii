@@ -42,7 +42,7 @@ func (t *TaskController) GetTasks(c echo.Context) error {
 			ID:       task.ID,
 			Name:     task.Name,
 			Type:     task.Type,
-			Deadline: task.Type,
+			Deadline: task.Deadline,
 			Status:   task.Status,
 		}
 
@@ -54,15 +54,15 @@ func (t *TaskController) GetTasks(c echo.Context) error {
 	return controllers.Success(c, response)
 }
 
-func (t *TaskController) GetTaskByName(c echo.Context) error {
+func (t *TaskController) GetTaskByID(c echo.Context) error {
 	username := c.Param("userName")
 	projectName := c.Param("projectName")
-	taskName := c.Param("taskName")
+	taskID := c.Param("taskID")
 
 	ctx := c.Request().Context()
 
 	// get task
-	tasks, err := t.Usecase.GetTaskByName(ctx, username, projectName, taskName)
+	tasks, err := t.Usecase.GetTaskByID(ctx, username, projectName, taskID)
 	if err == errors.ErrValidationFailed {
 		return controllers.Error(c, http.StatusBadRequest, errors.ErrValidationFailed)
 	}
@@ -77,7 +77,7 @@ func (t *TaskController) GetTaskByName(c echo.Context) error {
 			ID:       task.ID,
 			Name:     task.Name,
 			Type:     task.Type,
-			Deadline: task.Type,
+			Deadline: task.Deadline,
 			Status:   task.Status,
 		}
 
@@ -99,7 +99,10 @@ func (t *TaskController) CreateTask(c echo.Context) error {
 	// fetch context
 	ctx := c.Request().Context()
 
-	// TODO: check if task already exists
+	ts, _ := t.Usecase.GetTaskByName(ctx, taskRequest.Username, taskRequest.ProjectName, taskRequest.Name)
+	if len(ts) != 0 {
+		return controllers.Error(c, http.StatusBadRequest, errors.ErrTaskAlreadyExists)
+	}
 
 	taskDomain := task.Domain{
 		ID:          taskRequest.ID,

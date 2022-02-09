@@ -47,7 +47,15 @@ func UserRoleValidation(next echo.HandlerFunc) echo.HandlerFunc {
 
 func ExtractJWTPayloadRole(c echo.Context) (string, error) {
 	header := c.Request().Header.Clone().Get("Authorization")
+	if header == "" {
+		return "", errors.ErrInvalidCredentials
+	}
+
 	token := strings.Split(header, "Bearer ")[1]
+	if token == "" {
+		return "", errors.ErrInvalidCredentials
+	}
+
 	claims, err := sjwt.Parse(token)
 	if err != nil {
 		return "", err

@@ -12,12 +12,12 @@ type Domain struct {
 
 type DomainRepo interface {
 	GetProjects(ctx context.Context, username string) ([]Domain, error)
-	GetProjectByID(ctx context.Context, username, projectID string) ([]Domain, error)
+	GetProjectByName(ctx context.Context, username, projectName string) ([]Domain, error)
 	CreateProject(ctx context.Context, domain Domain) (Domain, error)
 }
 
 type DomainService interface {
 	GetProjects(ctx context.Context, username string) ([]Domain, error)
-	GetProjectByID(ctx context.Context, username, projectID string) ([]Domain, error)
+	GetProjectByName(ctx context.Context, username, projectName string) ([]Domain, error)
 	CreateProject(ctx context.Context, domain Domain) (Domain, error)
 }

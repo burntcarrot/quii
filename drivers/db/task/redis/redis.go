@@ -64,7 +64,7 @@ func (p *TaskRepo) CreateTask(ctx context.Context, us task.Domain) (task.Domain,
 }
 
 func (p *TaskRepo) GetTasks(ctx context.Context, username, projectName string) ([]task.Domain, error) {
-	key := fmt.Sprintf("%s:projects:%s:tasks", username, projectName)
+	key := fmt.Sprintf("%s:projects:%s:tasks", username, strings.ToLower(projectName))
 	raw, err := p.Conn.LRange(ctx, key, 0, MAX_FETCH_ROWS).Result()
 	if err != nil {
 		return []task.Domain{}, errors.ErrInternalServerError
@@ -84,8 +84,8 @@ func (p *TaskRepo) GetTasks(ctx context.Context, username, projectName string) (
 	return tasks, nil
 }
 
-func (p *TaskRepo) GetTaskByName(ctx context.Context, username, projectName, taskName string) ([]task.Domain, error) {
-	key := fmt.Sprintf("%s:projects:%s:tasks", username, projectName)
+func (p *TaskRepo) GetTaskByID(ctx context.Context, username, projectName, taskID string) ([]task.Domain, error) {
+	key := fmt.Sprintf("%s:projects:%s:tasks", username, strings.ToLower(projectName))
 	raw, err := p.Conn.LRange(ctx, key, 0, MAX_FETCH_ROWS).Result()
 	if err != nil {
 		return []task.Domain{}, errors.ErrInternalServerError
@@ -99,7 +99,31 @@ func (p *TaskRepo) GetTaskByName(ctx context.Context, username, projectName, tas
 			return []task.Domain{}, errors.ErrInternalServerError
 		}
 
-		if strings.EqualFold(ts.ID, taskName) {
+		if strings.EqualFold(ts.ID, taskID) {
+			tasks = append(tasks, ts.ToDomain())
+			return tasks, nil
+		}
+	}
+
+	return []task.Domain{}, nil
+}
+
+func (p *TaskRepo) GetTaskByName(ctx context.Context, username, projectName, taskName string) ([]task.Domain, error) {
+	key := fmt.Sprintf("%s:projects:%s:tasks", username, strings.ToLower(projectName))
+	raw, err := p.Conn.LRange(ctx, key, 0, MAX_FETCH_ROWS).Result()
+	if err != nil {
+		return []task.Domain{}, errors.ErrInternalServerError
+	}
+
+	ts := new(dbTask.Task)
+	var tasks []task.Domain
+
+	for _, j := range raw {
+		if err := json.Unmarshal([]byte(j), ts); err != nil {
+			return []task.Domain{}, errors.ErrInternalServerError
+		}
+
+		if strings.EqualFold(ts.Name, taskName) {
 			tasks = append(tasks, ts.ToDomain())
 			return tasks, nil
 		}

@@ -52,14 +52,14 @@ func (p *ProjectController) GetProjects(c echo.Context) error {
 	return controllers.Success(c, response)
 }
 
-func (p *ProjectController) GetProjectByID(c echo.Context) error {
+func (p *ProjectController) GetProjectByName(c echo.Context) error {
 	username := c.Param("userName")
-	projectID := c.Param("projectID")
+	projectName := c.Param("projectName")
 
 	ctx := c.Request().Context()
 
 	// get project
-	projects, err := p.Usecase.GetProjectByID(ctx, username, projectID)
+	projects, err := p.Usecase.GetProjectByName(ctx, username, projectName)
 	if err == errors.ErrValidationFailed {
 		return controllers.Error(c, http.StatusBadRequest, errors.ErrValidationFailed)
 	}
@@ -95,7 +95,14 @@ func (p *ProjectController) CreateProject(c echo.Context) error {
 	// fetch context
 	ctx := c.Request().Context()
 
-	// TODO: check if project already exists
+	pr, err := p.Usecase.GetProjectByName(ctx, projectRequest.Username, projectRequest.Name)
+	if err != nil {
+		return controllers.Error(c, http.StatusInternalServerError, errors.ErrInternalServerError)
+	}
+	fmt.Println(pr)
+	if len(pr) != 0 {
+		return controllers.Error(c, http.StatusBadRequest, errors.ErrProjectAlreadyExists)
+	}
 
 	projectDomain := project.Domain{
 		ID:          projectRequest.ID,

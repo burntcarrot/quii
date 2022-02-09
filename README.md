@@ -15,7 +15,7 @@ PM is built with:
 - GORM
 - Mockery
 - Testify
-- Insomnia
+- [Insomnia](https://insomnia.rest/)
 - Swagger
 - GitHub Actions
 
@@ -98,7 +98,7 @@ Coming soon.
 
 ## API Docs
 
-Powered by Insomnia and GitHub Pages: https://burntcarrot.github.io/pm
+Powered by [Insomnia](https://insomnia.rest/) and GitHub Pages: https://burntcarrot.github.io/pm
 
 ## CI
 

@@ -51,10 +51,15 @@ func (p *ProjectRepo) CreateProject(ctx context.Context, us project.Domain) (pro
 	}
 
 	// set counter for tasks while creating project itself
-	counter := fmt.Sprintf("%s:projects:%s:tasks:counter", us.Username, strings.ToLower(us.Name))
-	counterErr := p.Conn.Set(ctx, counter, 1, 0).Err()
+	// counter := fmt.Sprintf("%s:projects:counter", us.Username, strings.ToLower(us.Name))
+	// counterErr := p.Conn.Set(ctx, counter, 1, 0).Err()
 
-	if counterErr != nil {
+	// if counterErr != nil {
+	// 	return project.Domain{}, errors.ErrInternalServerError
+	// }
+
+	incrErr := p.Conn.Incr(ctx, projectsCounter).Err()
+	if incrErr != nil {
 		return project.Domain{}, errors.ErrInternalServerError
 	}
 
@@ -82,12 +87,14 @@ func (p *ProjectRepo) GetProjects(ctx context.Context, username string) ([]proje
 	return projects, nil
 }
 
-func (p *ProjectRepo) GetProjectByID(ctx context.Context, username, projectID string) ([]project.Domain, error) {
+func (p *ProjectRepo) GetProjectByName(ctx context.Context, username, projectName string) ([]project.Domain, error) {
 	key := fmt.Sprintf("%s:projects", username)
 	raw, err := p.Conn.LRange(ctx, key, 0, MAX_FETCH_ROWS).Result()
 	if err != nil {
 		return []project.Domain{}, errors.ErrInternalServerError
 	}
+
+	fmt.Println("raw:", raw)
 
 	pr := new(dbProject.Project)
 	var projects []project.Domain
@@ -97,7 +104,10 @@ func (p *ProjectRepo) GetProjectByID(ctx context.Context, username, projectID st
 			return []project.Domain{}, errors.ErrInternalServerError
 		}
 
-		if strings.EqualFold(pr.ID, projectID) {
+		fmt.Println("pr ID:", pr.Name)
+		fmt.Println("project ID:", projectName)
+
+		if strings.EqualFold(pr.Name, projectName) {
 			projects = append(projects, pr.ToDomain())
 			return projects, nil
 		}
