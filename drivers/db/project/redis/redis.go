@@ -94,8 +94,6 @@ func (p *ProjectRepo) GetProjectByName(ctx context.Context, username, projectNam
 		return []project.Domain{}, errors.ErrInternalServerError
 	}
 
-	fmt.Println("raw:", raw)
-
 	pr := new(dbProject.Project)
 	var projects []project.Domain
 
@@ -103,9 +101,6 @@ func (p *ProjectRepo) GetProjectByName(ctx context.Context, username, projectNam
 		if err := json.Unmarshal([]byte(j), pr); err != nil {
 			return []project.Domain{}, errors.ErrInternalServerError
 		}
-
-		fmt.Println("pr ID:", pr.Name)
-		fmt.Println("project ID:", projectName)
 
 		if strings.EqualFold(pr.Name, projectName) {
 			projects = append(projects, pr.ToDomain())

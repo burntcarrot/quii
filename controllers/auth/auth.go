@@ -1,7 +1,6 @@
 package auth
 
 import (
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -85,8 +84,6 @@ func (a *AuthController) Register(c echo.Context) error {
 		Email:    u.Email,
 		Role:     u.Role,
 	}
-
-	fmt.Println("Woohoo register!")
 
 	return controllers.Success(c, response)
 }
