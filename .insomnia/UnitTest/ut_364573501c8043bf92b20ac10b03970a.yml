@@ -1,10 +1,10 @@
-_id: ut_a190f0921d1b458b90aee8c5bbb2ecc5
+_id: ut_364573501c8043bf92b20ac10b03970a
 type: UnitTest
 parentId: uts_26f594f32c1542e88fd9fe70c9a0ae1c
-modified: 1644491272630
-created: 1644491266856
+modified: 1644509238934
+created: 1644509214439
 requestId: req_de81a4938473494382230ad6ea0a534d
-name: Returns 200
+name: Login (Get Token)
 code: |-
   const response1 = await insomnia.send();
   expect(response1.status).to.equal(200);
