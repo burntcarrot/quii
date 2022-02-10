@@ -13,5 +13,14 @@ todo: ## Displays all TODOs
 print: ## Displays all println
 	@grep -nr "fmt.Println*"
 
+run:
+	@go run cmd/pm/main.go
+
+inso-dev:
+	@sleep 10 && ./inso run test 'PM Test' --env 'OpenAPI env'
+
+inso-ci:
+	@sleep 10 && inso run test 'PM Test' --env 'OpenAPI env'
+
 # %:
 # 	@:

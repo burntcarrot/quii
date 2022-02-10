@@ -1,7 +1,6 @@
 package project
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/burntcarrot/pm/controllers"
@@ -47,8 +46,6 @@ func (p *ProjectController) GetProjects(c echo.Context) error {
 		response = append(response, getResponse)
 	}
 
-	fmt.Println("Woohoo fetched projects!")
-
 	return controllers.Success(c, response)
 }
 
@@ -80,8 +77,6 @@ func (p *ProjectController) GetProjectByName(c echo.Context) error {
 		response = append(response, getResponse)
 	}
 
-	fmt.Println("Woohoo fetched projects!")
-
 	return controllers.Success(c, response)
 }
 
@@ -99,7 +94,6 @@ func (p *ProjectController) CreateProject(c echo.Context) error {
 	if err != nil {
 		return controllers.Error(c, http.StatusInternalServerError, errors.ErrInternalServerError)
 	}
-	fmt.Println(pr)
 	if len(pr) != 0 {
 		return controllers.Error(c, http.StatusBadRequest, errors.ErrProjectAlreadyExists)
 	}
@@ -127,8 +121,6 @@ func (p *ProjectController) CreateProject(c echo.Context) error {
 		Description: project.Description,
 		Github:      project.Github,
 	}
-
-	fmt.Println("Woohoo project created!")
 
 	return controllers.Success(c, response)
 }

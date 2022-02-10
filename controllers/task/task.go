@@ -1,7 +1,6 @@
 package task
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/burntcarrot/pm/controllers"
@@ -49,8 +48,6 @@ func (t *TaskController) GetTasks(c echo.Context) error {
 		response = append(response, getResponse)
 	}
 
-	fmt.Println("Woohoo fetched tasks!")
-
 	return controllers.Success(c, response)
 }
 
@@ -83,8 +80,6 @@ func (t *TaskController) GetTaskByID(c echo.Context) error {
 
 		response = append(response, getResponse)
 	}
-
-	fmt.Println("Woohoo fetched tasks!")
 
 	return controllers.Success(c, response)
 }
@@ -130,8 +125,6 @@ func (t *TaskController) CreateTask(c echo.Context) error {
 		Deadline: task.Deadline,
 		Status:   task.Status,
 	}
-
-	fmt.Println("Woohoo task created!")
 
 	return controllers.Success(c, response)
 }
