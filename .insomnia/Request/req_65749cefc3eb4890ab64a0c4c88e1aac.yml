@@ -1,0 +1,65 @@
+_id: req_65749cefc3eb4890ab64a0c4c88e1aac
+type: Request
+parentId: fld_8402bdf34f884ba3bfc8c888bec3120f
+modified: 1644491232662
+created: 1644491232662
+url: localhost:8080/api/u/burntcarrot/create
+name: Create Project
+description: |-
+  ```response:200
+  {
+  	"status": 200,
+  	"data": {
+  		"id": "project_1",
+  		"name": "PM",
+  		"description": "Project Management Made Easy",
+  		"github_url": "https://github.com/burntcarrot/pm"
+  	},
+  	"error": "",
+  	"success": true
+  }
+  ```
+
+  ```response:400
+  {
+  	"status": 400,
+  	"data": null,
+  	"error": "project already exists",
+  	"success": false
+  }
+  ```
+
+  ```response:401
+  {
+  	"message": "Unauthorized"
+  }
+  ```
+
+  ```response:500
+  {
+  	"message": "Internal Server Error"
+  }
+  ```
+method: POST
+body:
+  mimeType: ""
+  text: |-
+    {
+    	"username": "burntcarrot",
+    	"name": "PM",
+    	"description": "Project Management Made Easy",
+    	"github_url": "https://github.com/burntcarrot/pm"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1644491232662
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

@@ -1,0 +1,464 @@
+_id: spc_ba938db438cc44159cbd45014772793e
+type: ApiSpec
+parentId: wrk_2c007241b133475b9e0f56303de9c471
+modified: 1644498590237
+created: 1644490927371
+fileName: PM
+contents: >-
+  {
+    "openapi": "3.0.0",
+    "info": {
+      "title": "PM",
+      "description": "The project management tool",
+      "contact": {},
+      "version": "1.0"
+    },
+    "servers": [
+      {
+        "url": "localhost:8080/api",
+        "variables": {}
+      }
+    ],
+    "paths": {
+      "/u/burntcarrot/projects": {
+        "get": {
+          "tags": [
+            "PM"
+          ],
+          "summary": "Get Projects",
+          "description": "```response:200\n{\n\t\"status\": 200,\n\t\"data\": [\n\t\t{\n\t\t\t\"id\": \"project_1\",\n\t\t\t\"name\": \"PM\",\n\t\t\t\"description\": \"Project Management Made Easy\",\n\t\t\t\"github_url\": \"https://github.com/burntcarrot/pm\"\n\t\t},\n\t\t{\n\t\t\t\"id\": \"project_2\",\n\t\t\t\"name\": \"PM-UI\",\n\t\t\t\"description\": \"UI for PM\",\n\t\t\t\"github_url\": \"https://github.com/burntcarrot/pm_ui\"\n\t\t}\n\t],\n\t\"error\": \"\",\n\t\"success\": true\n}\n```\n\n```response:401\n{\n\t\"message\": \"Unauthorized\"\n}\n```\n\n```response:500\n{\n\t\"message\": \"Internal Server Error\"\n}\n```",
+          "operationId": "GetProjects",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {},
+              "content": {
+                "text/plain": {
+                  "schema": {}
+                }
+              }
+            }
+          },
+          "deprecated": false,
+          "security": [
+            {
+              "bearer": []
+            }
+          ]
+        }
+      },
+      "/u/burntcarrot/projects/pm/tasks": {
+        "get": {
+          "tags": [
+            "PM"
+          ],
+          "summary": "Get Tasks",
+          "description": "```response:200\n{\n\t\"status\": 200,\n\t\"data\": [\n\t\t{\n\t\t\t\"id\": \"task_1\",\n\t\t\t\"name\": \"remove print statements\",\n\t\t\t\"type\": \"chore\",\n\t\t\t\"deadline\": \"\",\n\t\t\t\"status\": \"doing\"\n\t\t},\n\t],\n\t\"error\": \"\",\n\t\"success\": true\n}\n```\n\n```response:401\n{\n\t\"message\": \"Unauthorized\"\n}\n```\n\n```response:500\n{\n\t\"message\": \"Internal Server Error\"\n}\n```",
+          "operationId": "GetTasks",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {},
+              "content": {
+                "text/plain": {
+                  "schema": {}
+                }
+              }
+            }
+          },
+          "deprecated": false,
+          "security": [
+            {
+              "bearer": []
+            }
+          ]
+        }
+      },
+      "/u/burntcarrot/projects/pm": {
+        "get": {
+          "tags": [
+            "PM"
+          ],
+          "summary": "Get Project By Name",
+          "description": "```response:200\n{\n\t\"status\": 200,\n\t\"data\": [\n\t\t{\n\t\t\t\"id\": \"project_1\",\n\t\t\t\"name\": \"PM\",\n\t\t\t\"description\": \"Project Management Made Easy\",\n\t\t\t\"github_url\": \"https://github.com/burntcarrot/pm\"\n\t\t}\n\t],\n\t\"error\": \"\",\n\t\"success\": true\n}\n```\n\n```response:401\n{\n\t\"message\": \"Unauthorized\"\n}\n```\n\n```response:500\n{\n\t\"message\": \"Internal Server Error\"\n}\n```",
+          "operationId": "GetProjectByName",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {},
+              "content": {
+                "text/plain": {
+                  "schema": {}
+                }
+              }
+            }
+          },
+          "deprecated": false,
+          "security": [
+            {
+              "bearer": []
+            }
+          ]
+        }
+      },
+      "/u/burntcarrot/projects/pm/tasks/task_1": {
+        "get": {
+          "tags": [
+            "PM"
+          ],
+          "summary": "Get Task by ID",
+          "description": "```response:200\n{\n\t\"status\": 200,\n\t\"data\": [\n\t\t{\n\t\t\t\"id\": \"task_1\",\n\t\t\t\"name\": \"remove print statements\",\n\t\t\t\"type\": \"chore\",\n\t\t\t\"deadline\": \"\",\n\t\t\t\"status\": \"doing\"\n\t\t}\n\t],\n\t\"error\": \"\",\n\t\"success\": true\n}\n```\n\n```response:401\n{\n\t\"message\": \"Unauthorized\"\n}\n```\n\n```response:500\n{\n\t\"message\": \"Internal Server Error\"\n}\n```",
+          "operationId": "GetTaskbyID",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {},
+              "content": {
+                "text/plain": {
+                  "schema": {}
+                }
+              }
+            }
+          },
+          "deprecated": false,
+          "security": [
+            {
+              "bearer": []
+            }
+          ]
+        }
+      },
+      "/u/burntcarrot/create": {
+        "post": {
+          "tags": [
+            "PM"
+          ],
+          "summary": "Create Project",
+          "description": "```response:200\n{\n\t\"status\": 200,\n\t\"data\": {\n\t\t\"id\": \"project_1\",\n\t\t\"name\": \"PM\",\n\t\t\"description\": \"Project Management Made Easy\",\n\t\t\"github_url\": \"https://github.com/burntcarrot/pm\"\n\t},\n\t\"error\": \"\",\n\t\"success\": true\n}\n```\n\n```response:400\n{\n\t\"status\": 400,\n\t\"data\": null,\n\t\"error\": \"project already exists\",\n\t\"success\": false\n}\n```\n\n```response:401\n{\n\t\"message\": \"Unauthorized\"\n}\n```\n\n```response:500\n{\n\t\"message\": \"Internal Server Error\"\n}\n```",
+          "operationId": "CreateProject",
+          "parameters": [],
+          "requestBody": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateProjectRequest"
+                },
+                "example": {
+                  "username": "burntcarrot",
+                  "name": "PM",
+                  "description": "Project Management Made Easy",
+                  "github_url": "https://github.com/burntcarrot/pm"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {},
+              "content": {
+                "text/plain": {
+                  "schema": {}
+                }
+              }
+            }
+          },
+          "deprecated": false,
+          "security": [
+            {
+              "bearer": []
+            }
+          ]
+        }
+      },
+      "/u/burntcarrot/projects/pm/tasks/new": {
+        "post": {
+          "tags": [
+            "PM"
+          ],
+          "summary": "Create Task",
+          "description": "```response:200\n{\n\t\"status\": 200,\n\t\"data\": {\n\t\t\"id\": \"task_2\",\n\t\t\"name\": \"remove print statements\",\n\t\t\"type\": \"chore\",\n\t\t\"deadline\": \"\",\n\t\t\"status\": \"doing\"\n\t},\n\t\"error\": \"\",\n\t\"success\": true\n}\n```\n\n```response:400\n{\n\t\"status\": 400,\n\t\"data\": null,\n\t\"error\": \"validation failed\",\n\t\"success\": false\n}\n```\n\n```response:400\n{\n\t\"status\": 400,\n\t\"data\": null,\n\t\"error\": \"task already exists\",\n\t\"success\": false\n}\n```\n\n```response:401\n{\n\t\"message\": \"Unauthorized\"\n}\n```\n\n```response:500\n{\n\t\"message\": \"Internal Server Error\"\n}\n```",
+          "operationId": "CreateTask",
+          "parameters": [],
+          "requestBody": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateTaskRequest"
+                },
+                "example": {
+                  "username": "burntcarrot",
+                  "project_name": "PM",
+                  "name": "remove print statements",
+                  "type": "chore",
+                  "status": "doing"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {},
+              "content": {
+                "text/plain": {
+                  "schema": {}
+                }
+              }
+            }
+          },
+          "deprecated": false,
+          "security": [
+            {
+              "bearer": []
+            }
+          ]
+        }
+      },
+      "/profile/burntcarrot": {
+        "get": {
+          "tags": [
+            "PM"
+          ],
+          "summary": "Get User Profile",
+          "description": "```response:200\n{\n\t\"status\": 200,\n\t\"data\": {\n\t\t\"username\": \"burntcarrot\",\n\t\t\"email\": \"carrot@gmail.com\",\n\t\t\"role\": \"user\"\n\t},\n\t\"error\": \"\",\n\t\"success\": true\n}\n```\n\n```response:500\n{\n\t\"status\": 500,\n\t\"data\": null,\n\t\"error\": \"internal server error\",\n\t\"success\": false\n}\n```",
+          "operationId": "GetUserProfile",
+          "parameters": [],
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {},
+              "content": {
+                "text/plain": {
+                  "schema": {}
+                }
+              }
+            }
+          },
+          "deprecated": false,
+          "security": []
+        }
+      },
+      "/login": {
+        "post": {
+          "tags": [
+            "PM"
+          ],
+          "summary": "Login User",
+          "description": "```response:200\n{\n\t\"status\": 200,\n\t\"data\": {\n\t\t\"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYnVybnRjYXJyb3QiLCJyb2xlIjoidXNlciIsImV4cCI6MTY1MzAyMzU2M30.2ZD_FmZv_MnWV_QVUAGbyEqR9kHAhiH44h6yvXkPCv8\"\n\t},\n\t\"error\": \"\",\n\t\"success\": true\n}\n```\n\n```response:401\n{\n\t\"status\": 401,\n\t\"data\": null,\n\t\"error\": \"validation failed\",\n\t\"success\": false\n}\n```",
+          "operationId": "LoginUser",
+          "parameters": [],
+          "requestBody": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginUserRequest"
+                },
+                "example": {
+                  "username": "burntcarrot",
+                  "password": "abcdefgh"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {},
+              "content": {
+                "text/plain": {
+                  "schema": {}
+                }
+              }
+            }
+          },
+          "deprecated": false,
+          "security": []
+        }
+      },
+      "/register": {
+        "post": {
+          "tags": [
+            "PM"
+          ],
+          "summary": "Register User",
+          "description": "```response:200\n{\n\t\"status\": 200,\n\t\"data\": {\n\t\t\"id\": \"aab48899-73de-4f66-93e6-537b18be8fd8\",\n\t\t\"username\": \"burntcarrot\",\n\t\t\"email\": \"carrot@gmail.com\",\n\t\t\"role\": \"user\"\n\t},\n\t\"error\": \"\",\n\t\"success\": true\n}\n```\n\n```response:400\n{\n\t\"status\": 400,\n\t\"data\": null,\n\t\"error\": \"user already exists\",\n\t\"success\": false\n}\n```\n\n```response:401\n{\n\t\"status\": 401,\n\t\"data\": null,\n\t\"error\": \"validation failed\",\n\t\"success\": false\n}\n```",
+          "operationId": "RegisterUser",
+          "parameters": [],
+          "requestBody": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterUserRequest"
+                },
+                "example": {
+                  "username": "burntcarrot",
+                  "email": "carrot@gmail.com",
+                  "password": "abcdefgh",
+                  "role": "user"
+                }
+              }
+            },
+            "required": true
+          },
+          "responses": {
+            "200": {
+              "description": "",
+              "headers": {},
+              "content": {
+                "text/plain": {
+                  "schema": {}
+                }
+              }
+            }
+          },
+          "deprecated": false,
+          "security": []
+        }
+      }
+    },
+    "components": {
+      "schemas": {
+        "CreateProjectRequest": {
+          "title": "CreateProjectRequest",
+          "required": [
+            "username",
+            "name",
+            "description",
+            "github_url"
+          ],
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "github_url": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "username": "burntcarrot",
+            "name": "PM",
+            "description": "Project Management Made Easy",
+            "github_url": "https://github.com/burntcarrot/pm"
+          }
+        },
+        "CreateTaskRequest": {
+          "title": "CreateTaskRequest",
+          "required": [
+            "username",
+            "project_name",
+            "name",
+            "type",
+            "status"
+          ],
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "project_name": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string"
+            },
+            "status": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "username": "burntcarrot",
+            "project_name": "PM",
+            "name": "remove print statements",
+            "type": "chore",
+            "status": "doing"
+          }
+        },
+        "LoginUserRequest": {
+          "title": "LoginUserRequest",
+          "required": [
+            "username",
+            "password"
+          ],
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "username": "burntcarrot",
+            "password": "abcdefgh"
+          }
+        },
+        "RegisterUserRequest": {
+          "title": "RegisterUserRequest",
+          "required": [
+            "username",
+            "email",
+            "password",
+            "role"
+          ],
+          "type": "object",
+          "properties": {
+            "username": {
+              "type": "string"
+            },
+            "email": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string"
+            }
+          },
+          "example": {
+            "username": "burntcarrot",
+            "email": "carrot@gmail.com",
+            "password": "abcdefgh",
+            "role": "user"
+          }
+        }
+      },
+      "securitySchemes": {
+        "bearer": {
+          "type": "http",
+          "scheme": "bearer"
+        }
+      }
+    },
+    "security": [],
+    "tags": [
+      {
+        "name": "PM",
+        "description": ""
+      }
+    ]
+  }
+contentType: yaml

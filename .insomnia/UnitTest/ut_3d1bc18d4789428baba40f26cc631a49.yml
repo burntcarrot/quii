@@ -1,0 +1,13 @@
+_id: ut_3d1bc18d4789428baba40f26cc631a49
+type: UnitTest
+parentId: uts_26f594f32c1542e88fd9fe70c9a0ae1c
+modified: 1644496959945
+created: 1644491312351
+requestId: req_de81a4938473494382230ad6ea0a534d
+name: Returns token
+code: |-
+  const response1 = await insomnia.send();
+  const body = JSON.parse(response1.data);
+
+  const login_data = body.data;
+  expect(login_data).to.have.property('token');

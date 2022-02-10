@@ -1,0 +1,76 @@
+_id: req_6dc3f274a30b4d4b95938c4ee194830a
+type: Request
+parentId: fld_8402bdf34f884ba3bfc8c888bec3120f
+modified: 1644491232647
+created: 1644491232647
+url: localhost:8080/api/u/burntcarrot/projects/pm/tasks/new
+name: Create Task
+description: |-
+  ```response:200
+  {
+  	"status": 200,
+  	"data": {
+  		"id": "task_2",
+  		"name": "remove print statements",
+  		"type": "chore",
+  		"deadline": "",
+  		"status": "doing"
+  	},
+  	"error": "",
+  	"success": true
+  }
+  ```
+
+  ```response:400
+  {
+  	"status": 400,
+  	"data": null,
+  	"error": "validation failed",
+  	"success": false
+  }
+  ```
+
+  ```response:400
+  {
+  	"status": 400,
+  	"data": null,
+  	"error": "task already exists",
+  	"success": false
+  }
+  ```
+
+  ```response:401
+  {
+  	"message": "Unauthorized"
+  }
+  ```
+
+  ```response:500
+  {
+  	"message": "Internal Server Error"
+  }
+  ```
+method: POST
+body:
+  mimeType: ""
+  text: |-
+    {
+    	"username": "burntcarrot",
+    	"project_name": "PM",
+    	"name": "remove print statements",
+    	"type": "chore",
+    	"status": "doing"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+authentication: {}
+metaSortKey: -1644491232647
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

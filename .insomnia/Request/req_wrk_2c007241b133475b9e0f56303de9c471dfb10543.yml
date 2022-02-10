@@ -1,0 +1,24 @@
+_id: req_wrk_2c007241b133475b9e0f56303de9c471dfb10543
+type: Request
+parentId: fld_wrk_2c007241b133475b9e0f56303de9c4710c95dc61
+modified: 1644497645469
+created: 1644497645469
+url: "{{ base_url }}/u/burntcarrot/projects"
+name: Get Projects
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  token: "{{bearerToken}}"
+  prefix: ""
+metaSortKey: -1644497645469
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

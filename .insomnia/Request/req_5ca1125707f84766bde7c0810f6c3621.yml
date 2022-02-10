@@ -1,0 +1,48 @@
+_id: req_5ca1125707f84766bde7c0810f6c3621
+type: Request
+parentId: fld_8402bdf34f884ba3bfc8c888bec3120f
+modified: 1644491232652
+created: 1644491232652
+url: localhost:8080/api/u/burntcarrot/projects/pm
+name: Get Project By Name
+description: |-
+  ```response:200
+  {
+  	"status": 200,
+  	"data": [
+  		{
+  			"id": "project_1",
+  			"name": "PM",
+  			"description": "Project Management Made Easy",
+  			"github_url": "https://github.com/burntcarrot/pm"
+  		}
+  	],
+  	"error": "",
+  	"success": true
+  }
+  ```
+
+  ```response:401
+  {
+  	"message": "Unauthorized"
+  }
+  ```
+
+  ```response:500
+  {
+  	"message": "Internal Server Error"
+  }
+  ```
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1644491232652
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

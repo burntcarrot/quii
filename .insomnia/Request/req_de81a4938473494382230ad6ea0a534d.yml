@@ -1,0 +1,54 @@
+_id: req_de81a4938473494382230ad6ea0a534d
+type: Request
+parentId: fld_8402bdf34f884ba3bfc8c888bec3120f
+modified: 1644498572670
+created: 1644491232672
+url: localhost:8080/api/login
+name: Login User
+description: >-
+  ```response:200
+
+  {
+  	"status": 200,
+  	"data": {
+  		"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoiYnVybnRjYXJyb3QiLCJyb2xlIjoidXNlciIsImV4cCI6MTY1MzAyMzU2M30.2ZD_FmZv_MnWV_QVUAGbyEqR9kHAhiH44h6yvXkPCv8"
+  	},
+  	"error": "",
+  	"success": true
+  }
+
+  ```
+
+
+  ```response:401
+
+  {
+  	"status": 401,
+  	"data": null,
+  	"error": "validation failed",
+  	"success": false
+  }
+
+  ```
+method: POST
+body:
+  mimeType: ""
+  text: |-
+    {
+    	"username": "burntcarrot",
+    	"password": "abcdefgh"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+    id: pair_50f261a48b1d4280a42f2ec9dcfe7b64
+authentication: {}
+metaSortKey: -1644491232672
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

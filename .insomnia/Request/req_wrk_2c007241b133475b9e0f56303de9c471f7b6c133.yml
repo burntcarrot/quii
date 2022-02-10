@@ -1,0 +1,35 @@
+_id: req_wrk_2c007241b133475b9e0f56303de9c471f7b6c133
+type: Request
+parentId: fld_wrk_2c007241b133475b9e0f56303de9c4710c95dc61
+modified: 1644497645443
+created: 1644497645443
+url: "{{ base_url }}/u/burntcarrot/projects/pm/tasks/new"
+name: Create Task
+description: ""
+method: POST
+body:
+  mimeType: application/json
+  text: |-
+    {
+      "username": "burntcarrot",
+      "project_name": "PM",
+      "name": "remove print statements",
+      "type": "chore",
+      "status": "doing"
+    }
+parameters: []
+headers:
+  - name: Content-Type
+    value: application/json
+authentication:
+  type: bearer
+  token: "{{bearerToken}}"
+  prefix: ""
+metaSortKey: -1644497645443
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

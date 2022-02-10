@@ -1,0 +1,24 @@
+_id: req_wrk_2c007241b133475b9e0f56303de9c471b21a182f
+type: Request
+parentId: fld_wrk_2c007241b133475b9e0f56303de9c4710c95dc61
+modified: 1644497645455
+created: 1644497645455
+url: "{{ base_url }}/u/burntcarrot/projects/pm/tasks/task_1"
+name: Get Task by ID
+description: ""
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication:
+  type: bearer
+  token: "{{bearerToken}}"
+  prefix: ""
+metaSortKey: -1644497645455
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global

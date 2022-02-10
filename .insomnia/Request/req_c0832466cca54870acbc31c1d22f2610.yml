@@ -1,0 +1,42 @@
+_id: req_c0832466cca54870acbc31c1d22f2610
+type: Request
+parentId: fld_8402bdf34f884ba3bfc8c888bec3120f
+modified: 1644491232667
+created: 1644491232667
+url: localhost:8080/api/profile/burntcarrot
+name: Get User Profile
+description: |-
+  ```response:200
+  {
+  	"status": 200,
+  	"data": {
+  		"username": "burntcarrot",
+  		"email": "carrot@gmail.com",
+  		"role": "user"
+  	},
+  	"error": "",
+  	"success": true
+  }
+  ```
+
+  ```response:500
+  {
+  	"status": 500,
+  	"data": null,
+  	"error": "internal server error",
+  	"success": false
+  }
+  ```
+method: GET
+body: {}
+parameters: []
+headers: []
+authentication: {}
+metaSortKey: -1644491232667
+isPrivate: false
+settingStoreCookies: true
+settingSendCookies: true
+settingDisableRenderRequestBody: false
+settingEncodeUrl: true
+settingRebuildPath: true
+settingFollowRedirects: global
