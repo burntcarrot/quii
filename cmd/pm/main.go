@@ -16,6 +16,7 @@ import (
 	"github.com/burntcarrot/pm/entity/project"
 	"github.com/burntcarrot/pm/entity/task"
 	"github.com/burntcarrot/pm/entity/user"
+	"github.com/labstack/echo-contrib/prometheus"
 	"github.com/labstack/echo/v4"
 )
 
@@ -52,5 +53,9 @@ func main() {
 		TaskController:    taskController,
 	}
 	rc.InitRoutes(e)
+
+	p := prometheus.NewPrometheus("echo", nil)
+	p.Use(e)
+
 	log.Println(e.Start(":8080"))
 }
