@@ -2,8 +2,8 @@
 
 ### Table of Contents
 
-| [Tech Stack](#tech-stack) | [Unit Testing](#unit-testing) | [API Testing](#api-testing) | [API Docs](#api-docs) | [Continuous Integration](#ci) |
-| :-----------------------: | :---------------------------: | ----------------------------------- | --------------------------------------------- | ------------------------- |
+| [Tech Stack](#tech-stack) | [Unit Testing](#unit-testing) | [API Testing](#api-testing) | [API Docs](#api-docs) | [Continuous Integration](#ci) | [Monitoring](#monitoring) |
+| :-----------------------: | :---------------------------: | :---------------------------: | ----------------------------------- | --------------------------------------------- | ------------------------- |
 
 ## Tech Stack
 
@@ -16,8 +16,9 @@ PM is built with:
 - Mockery
 - Testify
 - [Insomnia](https://insomnia.rest/)
-- Swagger
 - GitHub Actions
+- Prometheus
+- Grafana
 
 ## Unit Testing
 
@@ -85,7 +86,11 @@ PASS
 
 ## API Testing
 
-Coming soon.
+API Tests can be run through Inso:
+
+```
+inso run test
+```
 
 ## API Docs
 
@@ -93,4 +98,13 @@ Powered by [Insomnia](https://insomnia.rest/) and GitHub Pages: https://burntcar
 
 ## CI
 
-Coming soon.
+PM uses Github Actions for running multiple workflows, like:
+- Automated Testing
+- Lint Checks
+- Automatic API Documentation deployment (see [API Docs](#api-docs))
+
+## Monitoring
+
+PM exports metrics through Prometheus, which are then utilized by Grafana for visualization:
+
+![Grafana Dashboard](static/pm-grafana.png)

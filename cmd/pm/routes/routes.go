@@ -8,6 +8,7 @@ import (
 	"github.com/burntcarrot/pm/helpers"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 type Controllers struct {
@@ -18,6 +19,9 @@ type Controllers struct {
 }
 
 func (c *Controllers) InitRoutes(e *echo.Echo) {
+	// expose prometheus metrics
+	e.GET("/metrics", echo.WrapHandler(promhttp.Handler()), middleware.CORS())
+
 	api := e.Group("/api")
 
 	// recovers from panics

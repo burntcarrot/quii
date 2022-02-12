@@ -8,7 +8,9 @@ import (
 	"github.com/burntcarrot/pm/entity/user"
 	"github.com/burntcarrot/pm/errors"
 	"github.com/burntcarrot/pm/helpers"
+	"github.com/burntcarrot/pm/metrics"
 	"github.com/labstack/echo/v4"
+	"github.com/prometheus/client_golang/prometheus"
 )
 
 type AuthController struct {
@@ -22,6 +24,13 @@ func NewAuthController(u user.Usecase) *AuthController {
 }
 
 func (a *AuthController) Login(c echo.Context) error {
+	// start timer
+	timer := prometheus.NewTimer(prometheus.ObserverFunc(func(v float64) {
+		us := v * 1000000
+		metrics.PromLoginDurations.Observe(us)
+	}))
+	defer timer.ObserveDuration()
+
 	userRequest := LoginRequest{}
 	err := c.Bind(&userRequest)
 	if err != nil {
@@ -42,6 +51,9 @@ func (a *AuthController) Login(c echo.Context) error {
 	if err != nil {
 		return controllers.Error(c, http.StatusInternalServerError, errors.ErrInternalServerError)
 	}
+
+	// only increment the counter when request is successful
+	metrics.PromLoginRequests.Inc()
 
 	return controllers.Success(c, LoginResponse{Token: token})
 }

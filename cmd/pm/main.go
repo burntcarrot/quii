@@ -16,9 +16,16 @@ import (
 	"github.com/burntcarrot/pm/entity/project"
 	"github.com/burntcarrot/pm/entity/task"
 	"github.com/burntcarrot/pm/entity/user"
-	"github.com/labstack/echo-contrib/prometheus"
+	"github.com/burntcarrot/pm/metrics"
 	"github.com/labstack/echo/v4"
+	"github.com/prometheus/client_golang/prometheus"
 )
+
+func init() {
+	// register prometheus metrics
+	prometheus.Register(metrics.PromLoginRequests)
+	prometheus.Register(metrics.PromLoginDurations)
+}
 
 func main() {
 	e := echo.New()
@@ -53,9 +60,5 @@ func main() {
 		TaskController:    taskController,
 	}
 	rc.InitRoutes(e)
-
-	p := prometheus.NewPrometheus("echo", nil)
-	p.Use(e)
-
 	log.Println(e.Start(":8080"))
 }
