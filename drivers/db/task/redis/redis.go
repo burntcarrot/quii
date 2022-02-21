@@ -10,23 +10,27 @@ import (
 	"github.com/burntcarrot/quii/entity/task"
 	"github.com/burntcarrot/quii/errors"
 	"github.com/go-redis/redis/v8"
+	"go.uber.org/zap"
 )
 
 const MAX_FETCH_ROWS = 9 * 100000
 
 type TaskRepo struct {
-	Conn *redis.Client
+	Conn   *redis.Client
+	Logger *zap.SugaredLogger
 }
 
-func NewTaskRepo(conn *redis.Client) task.DomainRepo {
-	return &TaskRepo{Conn: conn}
+func NewTaskRepo(conn *redis.Client, logger *zap.SugaredLogger) task.DomainRepo {
+	return &TaskRepo{Conn: conn, Logger: logger}
 }
 
 func (p *TaskRepo) CreateTask(ctx context.Context, us task.Domain) (task.Domain, error) {
 	// get ID from task counter
 	counter := fmt.Sprintf("%s:projects:%s:tasks:counter", us.Username, strings.ToLower(us.ProjectName))
+
 	counterValue, counterErr := p.Conn.Get(ctx, counter).Result()
 	if counterErr != nil {
+		p.Logger.Error("[createtask] failed to get task counter in redis")
 		return task.Domain{}, errors.ErrInternalServerError
 	}
 
@@ -43,6 +47,7 @@ func (p *TaskRepo) CreateTask(ctx context.Context, us task.Domain) (task.Domain,
 
 	raw, err := json.Marshal(createdTask)
 	if err != nil {
+		p.Logger.Errorf("[createtask] failed to marshal task: %v", err)
 		return task.Domain{}, errors.ErrInternalServerError
 	}
 
@@ -51,12 +56,14 @@ func (p *TaskRepo) CreateTask(ctx context.Context, us task.Domain) (task.Domain,
 
 	insertErr := p.Conn.RPush(ctx, key, raw).Err()
 	if insertErr != nil {
+		p.Logger.Errorf("[createtask] failed to push task in redis: %v", err)
 		return task.Domain{}, errors.ErrInternalServerError
 	}
 
 	// increment counter after creating task
 	incrErr := p.Conn.Incr(ctx, counter).Err()
 	if incrErr != nil {
+		p.Logger.Errorf("[createtask] failed to increment task counter: %v", err)
 		return task.Domain{}, errors.ErrInternalServerError
 	}
 
@@ -67,6 +74,7 @@ func (p *TaskRepo) GetTasks(ctx context.Context, username, projectName string) (
 	key := fmt.Sprintf("%s:projects:%s:tasks", username, strings.ToLower(projectName))
 	raw, err := p.Conn.LRange(ctx, key, 0, MAX_FETCH_ROWS).Result()
 	if err != nil {
+		p.Logger.Errorf("[gettasks] failed to fetch tasks: %v", err)
 		return []task.Domain{}, errors.ErrInternalServerError
 	}
 
@@ -75,6 +83,7 @@ func (p *TaskRepo) GetTasks(ctx context.Context, username, projectName string) (
 
 	for _, j := range raw {
 		if err := json.Unmarshal([]byte(j), ts); err != nil {
+			p.Logger.Errorf("[gettasks] failed to unmarshal task: %v", err)
 			return []task.Domain{}, errors.ErrInternalServerError
 		}
 
@@ -88,6 +97,7 @@ func (p *TaskRepo) GetTaskByID(ctx context.Context, username, projectName, taskI
 	key := fmt.Sprintf("%s:projects:%s:tasks", username, strings.ToLower(projectName))
 	raw, err := p.Conn.LRange(ctx, key, 0, MAX_FETCH_ROWS).Result()
 	if err != nil {
+		p.Logger.Errorf("[gettaskbyid] failed to fetch tasks: %v", err)
 		return []task.Domain{}, errors.ErrInternalServerError
 	}
 
@@ -96,6 +106,7 @@ func (p *TaskRepo) GetTaskByID(ctx context.Context, username, projectName, taskI
 
 	for _, j := range raw {
 		if err := json.Unmarshal([]byte(j), ts); err != nil {
+			p.Logger.Errorf("[gettaskbyid] failed to unmarshal task: %v", err)
 			return []task.Domain{}, errors.ErrInternalServerError
 		}
 
@@ -112,6 +123,7 @@ func (p *TaskRepo) GetTaskByName(ctx context.Context, username, projectName, tas
 	key := fmt.Sprintf("%s:projects:%s:tasks", username, strings.ToLower(projectName))
 	raw, err := p.Conn.LRange(ctx, key, 0, MAX_FETCH_ROWS).Result()
 	if err != nil {
+		p.Logger.Errorf("[gettaskbyname] failed to fetch tasks: %v", err)
 		return []task.Domain{}, errors.ErrInternalServerError
 	}
 
@@ -120,6 +132,7 @@ func (p *TaskRepo) GetTaskByName(ctx context.Context, username, projectName, tas
 
 	for _, j := range raw {
 		if err := json.Unmarshal([]byte(j), ts); err != nil {
+			p.Logger.Errorf("[gettaskbyname] failed to unmarshal task: %v", err)
 			return []task.Domain{}, errors.ErrInternalServerError
 		}
 

@@ -1,0 +1,8 @@
+global:
+  scrape_interval: 1s # Make scrape interval to 1s for testing.
+
+scrape_configs:
+  - job_name: 'quii-demo'
+    scrape_interval: 1s
+    static_configs:
+      - targets: ['localhost:8080']

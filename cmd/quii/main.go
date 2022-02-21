@@ -16,6 +16,7 @@ import (
 	"github.com/burntcarrot/quii/entity/project"
 	"github.com/burntcarrot/quii/entity/task"
 	"github.com/burntcarrot/quii/entity/user"
+	"github.com/burntcarrot/quii/logging"
 	"github.com/burntcarrot/quii/metrics"
 	"github.com/labstack/echo/v4"
 	"github.com/prometheus/client_golang/prometheus"
@@ -31,6 +32,9 @@ func init() {
 func main() {
 	e := echo.New()
 
+	// create logger
+	logger := logging.NewLogger()
+
 	// get DB connection
 	// TODO: parse DB connection configs from config file
 	dbConfig := redis.DBConfig{
@@ -43,15 +47,15 @@ func main() {
 	timeout := time.Duration(time.Minute * 1)
 
 	// initialize usecase
-	userUsecase := user.NewUsecase(userDbRedis.NewUserRepo(Conn), timeout)
-	projectUsecase := project.NewUsecase(projectDbRedis.NewProjectRepo(Conn), timeout)
-	taskUsecase := task.NewUsecase(taskDbRedis.NewTaskRepo(Conn), timeout)
+	userUsecase := user.NewUsecase(userDbRedis.NewUserRepo(Conn, logger), timeout)
+	projectUsecase := project.NewUsecase(projectDbRedis.NewProjectRepo(Conn, logger), timeout)
+	taskUsecase := task.NewUsecase(taskDbRedis.NewTaskRepo(Conn, logger), timeout)
 
 	// initialize controllers
-	authController := auth.NewAuthController(*userUsecase)
-	userController := uc.NewUserController(*userUsecase)
-	projectController := pc.NewProjectController(*projectUsecase)
-	taskController := tc.NewTaskController(*taskUsecase)
+	authController := auth.NewAuthController(*userUsecase, logger)
+	userController := uc.NewUserController(*userUsecase, logger)
+	projectController := pc.NewProjectController(*projectUsecase, logger)
+	taskController := tc.NewTaskController(*taskUsecase, logger)
 
 	// initialize routes and start echo server
 	rc := routes.Controllers{
