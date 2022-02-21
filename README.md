@@ -2,8 +2,8 @@
 
 ### Table of Contents
 
-| [Tech Stack](#tech-stack) | [Unit Testing](#unit-testing) | [API Testing](#api-testing) | [API Docs](#api-docs) | [Continuous Integration](#ci) | [Monitoring](#monitoring) |
-| :-----------------------: | :---------------------------: | :---------------------------: | ----------------------------------- | --------------------------------------------- | ------------------------- |
+| [Tech Stack](#tech-stack) | [Unit Testing](#unit-testing) | [API Testing](#api-testing) | [API Docs](#api-docs) | [Continuous Integration](#ci) | [Monitoring](#monitoring) | [Logging](#logging) |
+| :-----------------------: | :---------------------------: | :---------------------------: | ----------------------------------- | --------------------------------------------- | ------------------------- | ------------------------- |
 
 ## Tech Stack
 
@@ -19,6 +19,10 @@ Quii is built with:
 - GitHub Actions
 - Prometheus
 - Grafana
+- Loki
+- Promtail
+- Zap
+- Lumberjack
 
 ## Unit Testing
 
@@ -108,3 +112,9 @@ Quii uses Github Actions for running multiple workflows, like:
 Quii exports metrics through Prometheus, which are then utilized by Grafana for visualization:
 
 ![Grafana Dashboard](static/quii-grafana.png)
+
+## Logging
+
+Quii exports logs through zap and lumberjack, which is then used by promtail and Loki:
+
+![Grafana Logs](static/loki.png)

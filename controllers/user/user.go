@@ -10,15 +10,18 @@ import (
 	"github.com/burntcarrot/quii/errors"
 	"github.com/burntcarrot/quii/metrics"
 	"github.com/labstack/echo/v4"
+	"go.uber.org/zap"
 )
 
 type UserController struct {
 	Usecase user.Usecase
+	Logger  *zap.SugaredLogger
 }
 
-func NewUserController(u user.Usecase) *UserController {
+func NewUserController(u user.Usecase, l *zap.SugaredLogger) *UserController {
 	return &UserController{
 		Usecase: u,
+		Logger:  l,
 	}
 }
 
@@ -27,6 +30,7 @@ func (u *UserController) GetByName(c echo.Context) error {
 	userName := c.Param("userName")
 	us, err := u.Usecase.GetByName(ctx, strings.ToLower(userName))
 	if err != nil {
+		u.Logger.Errorf("[getbyname] failed to fetch user: %v", err)
 		return controllers.Error(c, http.StatusInternalServerError, errors.ErrInternalServerError)
 	}
 
