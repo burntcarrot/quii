@@ -1,4 +1,4 @@
-module github.com/burntcarrot/pm
+module github.com/burntcarrot/quii
 
 go 1.17
 

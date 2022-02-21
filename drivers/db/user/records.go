@@ -1,6 +1,6 @@
 package user
 
-import "github.com/burntcarrot/pm/entity/user"
+import "github.com/burntcarrot/quii/entity/user"
 
 type User struct {
 	ID       string `json:"id"`

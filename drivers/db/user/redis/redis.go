@@ -6,10 +6,10 @@ import (
 	"fmt"
 	"strings"
 
-	dbUser "github.com/burntcarrot/pm/drivers/db/user"
-	"github.com/burntcarrot/pm/entity/user"
-	"github.com/burntcarrot/pm/errors"
-	"github.com/burntcarrot/pm/helpers"
+	dbUser "github.com/burntcarrot/quii/drivers/db/user"
+	"github.com/burntcarrot/quii/entity/user"
+	"github.com/burntcarrot/quii/errors"
+	"github.com/burntcarrot/quii/helpers"
 	"github.com/go-redis/redis/v8"
 	"github.com/google/uuid"
 )

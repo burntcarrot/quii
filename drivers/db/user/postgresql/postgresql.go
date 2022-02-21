@@ -3,9 +3,9 @@ package postgresql
 import (
 	"context"
 
-	dbUser "github.com/burntcarrot/pm/drivers/db/user"
-	"github.com/burntcarrot/pm/entity/user"
-	"github.com/burntcarrot/pm/helpers"
+	dbUser "github.com/burntcarrot/quii/drivers/db/user"
+	"github.com/burntcarrot/quii/entity/user"
+	"github.com/burntcarrot/quii/helpers"
 
 	"gorm.io/gorm"
 )

@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/brianvoe/sjwt"
-	"github.com/burntcarrot/pm/errors"
+	"github.com/burntcarrot/quii/errors"
 	"github.com/golang-jwt/jwt"
 	"github.com/labstack/echo/v4"
 )

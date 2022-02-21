@@ -4,7 +4,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/burntcarrot/pm/errors"
+	"github.com/burntcarrot/quii/errors"
 	"github.com/go-playground/validator"
 )
 

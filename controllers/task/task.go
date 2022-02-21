@@ -3,9 +3,9 @@ package task
 import (
 	"net/http"
 
-	"github.com/burntcarrot/pm/controllers"
-	"github.com/burntcarrot/pm/entity/task"
-	"github.com/burntcarrot/pm/errors"
+	"github.com/burntcarrot/quii/controllers"
+	"github.com/burntcarrot/quii/entity/task"
+	"github.com/burntcarrot/quii/errors"
 	"github.com/labstack/echo/v4"
 )
 

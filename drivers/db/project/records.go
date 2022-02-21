@@ -1,6 +1,6 @@
 package project
 
-import "github.com/burntcarrot/pm/entity/project"
+import "github.com/burntcarrot/quii/entity/project"
 
 type Project struct {
 	ID          string `json:"id"`

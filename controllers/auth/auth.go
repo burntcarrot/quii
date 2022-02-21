@@ -3,12 +3,13 @@ package auth
 import (
 	"net/http"
 	"strings"
+	"unsafe"
 
-	"github.com/burntcarrot/pm/controllers"
-	"github.com/burntcarrot/pm/entity/user"
-	"github.com/burntcarrot/pm/errors"
-	"github.com/burntcarrot/pm/helpers"
-	"github.com/burntcarrot/pm/metrics"
+	"github.com/burntcarrot/quii/controllers"
+	"github.com/burntcarrot/quii/entity/user"
+	"github.com/burntcarrot/quii/errors"
+	"github.com/burntcarrot/quii/helpers"
+	"github.com/burntcarrot/quii/metrics"
 	"github.com/labstack/echo/v4"
 	"github.com/prometheus/client_golang/prometheus"
 )
@@ -54,6 +55,7 @@ func (a *AuthController) Login(c echo.Context) error {
 
 	// only increment the counter when request is successful
 	metrics.PromLoginRequests.Inc()
+	defer metrics.PromLoginRequestSizes.Observe(float64(unsafe.Sizeof(LoginResponse{Token: token})))
 
 	return controllers.Success(c, LoginResponse{Token: token})
 }

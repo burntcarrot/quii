@@ -3,9 +3,9 @@ package project
 import (
 	"net/http"
 
-	"github.com/burntcarrot/pm/controllers"
-	"github.com/burntcarrot/pm/entity/project"
-	"github.com/burntcarrot/pm/errors"
+	"github.com/burntcarrot/quii/controllers"
+	"github.com/burntcarrot/quii/entity/project"
+	"github.com/burntcarrot/quii/errors"
 	"github.com/labstack/echo/v4"
 )
 

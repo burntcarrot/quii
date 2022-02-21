@@ -1,7 +1,7 @@
 package helpers
 
 import (
-	"github.com/burntcarrot/pm/errors"
+	"github.com/burntcarrot/quii/errors"
 	"golang.org/x/crypto/bcrypt"
 )
 

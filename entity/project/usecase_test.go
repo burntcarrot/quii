@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/burntcarrot/pm/entity/project"
-	"github.com/burntcarrot/pm/entity/project/mocks"
+	"github.com/burntcarrot/quii/entity/project"
+	"github.com/burntcarrot/quii/entity/project/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -20,9 +20,9 @@ func setup() {
 	projectDomain = project.Domain{
 		ID:          "project_1",
 		Username:    "burntcarrot",
-		Name:        "PM",
+		Name:        "Quii",
 		Description: "Project Management made easy",
-		Github:      "github.com/burntcarrot/pm",
+		Github:      "github.com/burntcarrot/quii",
 	}
 }
 

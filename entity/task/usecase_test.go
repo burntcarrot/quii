@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/burntcarrot/pm/entity/task"
-	"github.com/burntcarrot/pm/entity/task/mocks"
+	"github.com/burntcarrot/quii/entity/task"
+	"github.com/burntcarrot/quii/entity/task/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -20,7 +20,7 @@ func setup() {
 	taskDomain = task.Domain{
 		ID:          "task_1",
 		Username:    "burntcarrot",
-		ProjectName: "pm",
+		ProjectName: "quii",
 		Type:        "feature",
 		Name:        "Add Login endpoint",
 		Status:      "doing",
@@ -53,7 +53,7 @@ func TestGetTasks(t *testing.T) {
 	taskRepo.On("GetTasks", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return([]task.Domain{taskDomain}, nil).Once()
 
 	t.Run("Get Tasks", func(t *testing.T) {
-		tasks, err := taskService.GetTasks(context.Background(), "burntcarrot", "pm")
+		tasks, err := taskService.GetTasks(context.Background(), "burntcarrot", "quii")
 		if err != nil {
 			t.Errorf("Error: %s", err)
 		}
@@ -71,7 +71,7 @@ func TestGetTaskByName(t *testing.T) {
 	taskRepo.On("GetTaskByName", mock.Anything, mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return([]task.Domain{taskDomain}, nil)
 
 	t.Run("Valid Get Task by Name", func(t *testing.T) {
-		tasks, err := taskService.GetTaskByName(context.Background(), "burntcarrot", "pm", "task_1")
+		tasks, err := taskService.GetTaskByName(context.Background(), "burntcarrot", "quii", "task_1")
 		if err != nil {
 			t.Errorf("Error: %s", err)
 		}
@@ -84,7 +84,7 @@ func TestGetTaskByName(t *testing.T) {
 	})
 
 	t.Run("Invalid Get Task by Name", func(t *testing.T) {
-		task, err := taskService.GetTaskByName(context.Background(), "burntcarrot", "pm", "task_nonexistent")
+		task, err := taskService.GetTaskByName(context.Background(), "burntcarrot", "quii", "task_nonexistent")
 		if err != nil {
 			t.Errorf("Error: %s", err)
 		}
