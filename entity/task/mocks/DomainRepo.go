@@ -5,7 +5,7 @@ package mocks
 import (
 	context "context"
 
-	task "github.com/burntcarrot/pm/entity/task"
+	task "github.com/burntcarrot/quii/entity/task"
 	mock "github.com/stretchr/testify/mock"
 )
 

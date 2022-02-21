@@ -4,20 +4,29 @@ import (
 	"log"
 	"time"
 
-	"github.com/burntcarrot/pm/cmd/pm/routes"
-	"github.com/burntcarrot/pm/controllers/auth"
-	pc "github.com/burntcarrot/pm/controllers/project"
-	tc "github.com/burntcarrot/pm/controllers/task"
-	uc "github.com/burntcarrot/pm/controllers/user"
-	projectDbRedis "github.com/burntcarrot/pm/drivers/db/project/redis"
-	taskDbRedis "github.com/burntcarrot/pm/drivers/db/task/redis"
-	userDbRedis "github.com/burntcarrot/pm/drivers/db/user/redis"
-	"github.com/burntcarrot/pm/drivers/redis"
-	"github.com/burntcarrot/pm/entity/project"
-	"github.com/burntcarrot/pm/entity/task"
-	"github.com/burntcarrot/pm/entity/user"
+	"github.com/burntcarrot/quii/cmd/quii/routes"
+	"github.com/burntcarrot/quii/controllers/auth"
+	pc "github.com/burntcarrot/quii/controllers/project"
+	tc "github.com/burntcarrot/quii/controllers/task"
+	uc "github.com/burntcarrot/quii/controllers/user"
+	projectDbRedis "github.com/burntcarrot/quii/drivers/db/project/redis"
+	taskDbRedis "github.com/burntcarrot/quii/drivers/db/task/redis"
+	userDbRedis "github.com/burntcarrot/quii/drivers/db/user/redis"
+	"github.com/burntcarrot/quii/drivers/redis"
+	"github.com/burntcarrot/quii/entity/project"
+	"github.com/burntcarrot/quii/entity/task"
+	"github.com/burntcarrot/quii/entity/user"
+	"github.com/burntcarrot/quii/metrics"
 	"github.com/labstack/echo/v4"
+	"github.com/prometheus/client_golang/prometheus"
 )
+
+func init() {
+	// register prometheus metrics
+	_ = prometheus.Register(metrics.PromLoginRequests)
+	_ = prometheus.Register(metrics.PromLoginDurations)
+	_ = prometheus.Register(metrics.PromLoginRequestSizes)
+}
 
 func main() {
 	e := echo.New()

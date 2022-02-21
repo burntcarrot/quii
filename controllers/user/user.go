@@ -3,10 +3,12 @@ package user
 import (
 	"net/http"
 	"strings"
+	"unsafe"
 
-	"github.com/burntcarrot/pm/controllers"
-	"github.com/burntcarrot/pm/entity/user"
-	"github.com/burntcarrot/pm/errors"
+	"github.com/burntcarrot/quii/controllers"
+	"github.com/burntcarrot/quii/entity/user"
+	"github.com/burntcarrot/quii/errors"
+	"github.com/burntcarrot/quii/metrics"
 	"github.com/labstack/echo/v4"
 )
 
@@ -33,6 +35,8 @@ func (u *UserController) GetByName(c echo.Context) error {
 		Email:    us.Email,
 		Role:     us.Role,
 	}
+
+	defer metrics.PromLoginRequestSizes.Observe(float64(unsafe.Sizeof(response)))
 
 	return controllers.Success(c, response)
 }

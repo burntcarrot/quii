@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/burntcarrot/pm/entity/user"
-	"github.com/burntcarrot/pm/entity/user/mocks"
+	"github.com/burntcarrot/quii/entity/user"
+	"github.com/burntcarrot/quii/entity/user/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

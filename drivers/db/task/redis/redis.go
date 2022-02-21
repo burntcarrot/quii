@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"strings"
 
-	dbTask "github.com/burntcarrot/pm/drivers/db/task"
-	"github.com/burntcarrot/pm/entity/task"
-	"github.com/burntcarrot/pm/errors"
+	dbTask "github.com/burntcarrot/quii/drivers/db/task"
+	"github.com/burntcarrot/quii/entity/task"
+	"github.com/burntcarrot/quii/errors"
 	"github.com/go-redis/redis/v8"
 )
 

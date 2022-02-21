@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"strings"
 
-	dbProject "github.com/burntcarrot/pm/drivers/db/project"
-	"github.com/burntcarrot/pm/entity/project"
-	"github.com/burntcarrot/pm/errors"
+	dbProject "github.com/burntcarrot/quii/drivers/db/project"
+	"github.com/burntcarrot/quii/entity/project"
+	"github.com/burntcarrot/quii/errors"
 	"github.com/go-redis/redis/v8"
 )
 
@@ -50,16 +50,16 @@ func (p *ProjectRepo) CreateProject(ctx context.Context, us project.Domain) (pro
 		return project.Domain{}, errors.ErrInternalServerError
 	}
 
-	// set counter for tasks while creating project itself
-	// counter := fmt.Sprintf("%s:projects:counter", us.Username, strings.ToLower(us.Name))
-	// counterErr := p.Conn.Set(ctx, counter, 1, 0).Err()
-
-	// if counterErr != nil {
-	// 	return project.Domain{}, errors.ErrInternalServerError
-	// }
-
 	incrErr := p.Conn.Incr(ctx, projectsCounter).Err()
 	if incrErr != nil {
+		return project.Domain{}, errors.ErrInternalServerError
+	}
+
+	// set counter for task while creating project
+	counter := fmt.Sprintf("%s:projects:%s:tasks:counter", strings.ToLower(us.Username), strings.ToLower(us.Name))
+	counterErr := p.Conn.Set(ctx, counter, 1, 0).Err()
+
+	if counterErr != nil {
 		return project.Domain{}, errors.ErrInternalServerError
 	}
 

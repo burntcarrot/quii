@@ -1,6 +1,6 @@
 package task
 
-import "github.com/burntcarrot/pm/entity/task"
+import "github.com/burntcarrot/quii/entity/task"
 
 type Task struct {
 	ID       string `json:"id"`
